@@ -1,0 +1,36 @@
+name: Release Charts
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      - name: Import GPG key
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --dearmor --output keyring.gpg
+          echo "${{ secrets.GPG_PASSPHRASE }}" > passphrase.txt
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.7.0
+        env:
+          CR_KEY: Scalified SRL <scalified@gmail.com>
+          CR_KEYRING: keyring.gpg
+          CR_PASSPHRASE_FILE: passphrase.txt
+          CR_SIGN: true
+          CR_TOKEN: "${{ secrets.GH_TOKEN }}"
+      - name: Cleanup
+        run: |
+          rm -rf keyring.gpg passphrase.txt

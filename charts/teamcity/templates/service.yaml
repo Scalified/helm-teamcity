@@ -1,0 +1,16 @@
+{{- if .Values.teamcity.server.service -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "teamcity.server.fullname" . }}
+  labels:
+    {{- include "teamcity.server.labels" . | nindent 4 }}
+spec:
+  selector:
+    {{- include "teamcity.server.selectorLabels" . | nindent 4 }}
+  type: {{ .Values.teamcity.server.service.type }}
+  {{- if .Values.teamcity.server.service.ports }}
+  ports:
+{{ toYaml .Values.teamcity.server.service.ports | indent 4 }}
+  {{- end }}
+{{- end }}

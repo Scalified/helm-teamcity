@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "teamcity.server.fullname" . }}
+  labels:
+    {{- include "teamcity.server.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.teamcity.server.replicaCount }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "teamcity.server.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "teamcity.server.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: teamcity-server
+          image: "{{ .Values.teamcity.server.image.repository }}:{{ .Values.teamcity.server.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.teamcity.server.image.pullPolicy }}
+          {{- if .Values.teamcity.server.service }}
+          ports:
+            {{- range .Values.teamcity.server.service.ports }}
+            - containerPort: {{ .targetPort }}
+              name: {{ .name }}
+              protocol: {{ .protocol }}
+            {{- end }}
+          {{- end }}
+{{- if .Values.teamcity.server.env }}
+          env:
+{{ toYaml .Values.teamcity.server.env | indent 12 }}
+{{- end }}
+          startupProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 15
+            periodSeconds: 15
+            successThreshold: 1
+            tcpSocket:
+              port: {{ .Values.teamcity.server.port }}
+            timeoutSeconds: 2
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.teamcity.server.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.teamcity.server.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+{{ toYaml .Values.teamcity.server.resources | indent 12 }}
+{{- if .Values.volumeMounts }}
+          volumeMounts:
+{{ toYaml .Values.teamcity.server.volumeMounts | indent 12 }}
+{{- end }}
+      restartPolicy: Always
+{{- if .Values.volumes }}
+      volumes:
+{{ toYaml .Values.volumes | indent 8 }}
+{{- end }}
+        - name: database
+          image: "{{ .Values.teamcity.database.image.repository }}:{{ .Values.teamcity.database.image.tag }}"
+          imagePullPolicy: {{ .Values.teamcity.database.image.pullPolicy }}
+{{- if .Values.teamcity.database.env }}
+          env:
+{{ toYaml .Values.teamcity.database.env | indent 12 }}
+{{- end }}
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - '-d'
+                - $POSTGRES_DB
+                - '-U'
+                - $POSTGRES_USER
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - '-d'
+                - $POSTGRES_DB
+                - '-U'
+                - $POSTGRES_USER
+            failureThreshold: 5
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 2
+          resources:
+{{ toYaml .Values.teamcity.server.resources | indent 12 }}
+{{- if .Values.volumeMounts }}
+          volumeMounts:
+{{ toYaml .Values.teamcity.server.volumeMounts | indent 12 }}
+{{- end }}
+      restartPolicy: Always
+{{- if .Values.volumes }}
+      volumes:
+{{ toYaml .Values.volumes | indent 8 }}
+{{- end }}
