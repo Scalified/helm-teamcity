@@ -51,7 +51,7 @@
                 "type": "object",
                 "properties": {
                   "name": { "type": "string" },
-                  "value": { "type": ["string", "boolean", "number"] }
+                  "value": { "type": "string" }
                 },
                 "required": ["name", "value"]
               }

@@ -22,7 +22,7 @@ teamcity:
     # Environment variables for TeamCity server container
     env:
       - name: TEAMCITY_HTTPS_PROXY_ENABLED
-        value: true
+        value: "true"
 
     resources:
       requests:
