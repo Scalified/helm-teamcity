@@ -62,11 +62,6 @@ spec:
           volumeMounts:
 {{ toYaml .Values.teamcity.server.volumeMounts | indent 12 }}
 {{- end }}
-      restartPolicy: Always
-{{- if .Values.volumes }}
-      volumes:
-{{ toYaml .Values.volumes | indent 8 }}
-{{- end }}
         - name: database
           image: "{{ .Values.teamcity.database.image.repository }}:{{ .Values.teamcity.database.image.tag }}"
           imagePullPolicy: {{ .Values.teamcity.database.image.pullPolicy }}

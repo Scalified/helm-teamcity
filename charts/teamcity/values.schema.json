@@ -15,11 +15,9 @@
     },
     "teamcity": {
       "type": "object",
-      "description": "TeamCity configuration",
       "properties": {
         "server": {
           "type": "object",
-          "description": "TeamCity Server configuration",
           "properties": {
             "replicaCount": {
               "type": "integer",
@@ -31,8 +29,7 @@
               "properties": {
                 "repository": {
                   "type": "string",
-                  "description": "Docker image repository for TeamCity Server",
-                  "default": "jetbrains/teamcity-server"
+                  "description": "Docker image repository for TeamCity Server"
                 },
                 "tag": {
                   "type": "string",
@@ -45,16 +42,16 @@
                   "default": "IfNotPresent"
                 }
               },
-              "required": ["repository", "tag", "pullPolicy"]
+              "required": ["repository", "pullPolicy"]
             },
             "env": {
               "type": "array",
-              "description": "Environment variables for TeamCity Server containers",
+              "description": "Environment variables for TeamCity server container",
               "items": {
                 "type": "object",
                 "properties": {
                   "name": { "type": "string" },
-                  "value": {}
+                  "value": { "type": ["string", "boolean", "number"] }
                 },
                 "required": ["name", "value"]
               }
@@ -67,8 +64,7 @@
                   "properties": {
                     "memory": {
                       "type": "string",
-                      "description": "Minimum amount of memory requested for the server container",
-                      "default": "4Gi"
+                      "description": "Minimum amount of memory requested for the server container"
                     }
                   },
                   "required": ["memory"]
@@ -96,7 +92,6 @@
             },
             "service": {
               "type": "object",
-              "description": "Configuration for the Kubernetes Service exposing TeamCity Server",
               "properties": {
                 "type": {
                   "type": "string",
@@ -125,7 +120,6 @@
         },
         "database": {
           "type": "object",
-          "description": "TeamCity Database configuration",
           "properties": {
             "replicaCount": {
               "type": "integer",
@@ -137,8 +131,7 @@
               "properties": {
                 "repository": {
                   "type": "string",
-                  "description": "Docker image repository for TeamCity Server",
-                  "default": "postgres"
+                  "description": "Docker image repository for TeamCity Server"
                 },
                 "tag": {
                   "type": "string",
@@ -155,12 +148,12 @@
             },
             "env": {
               "type": "array",
-              "description": "Environment variables for TeamCity Database containers",
+              "description": "Environment variables for TeamCity database container",
               "items": {
                 "type": "object",
                 "properties": {
                   "name": { "type": "string" },
-                  "value": {}
+                  "value": { "type": ["string", "boolean", "number"] }
                 },
                 "required": ["name", "value"]
               }
@@ -173,8 +166,7 @@
                   "properties": {
                     "memory": {
                       "type": "string",
-                      "description": "Minimum amount of memory requested for the server container",
-                      "default": "2Gi"
+                      "description": "Minimum amount of memory requested for the server container"
                     }
                   },
                   "required": ["memory"]
@@ -200,7 +192,6 @@
         },
         "agent": {
           "type": "object",
-          "description": "TeamCity Agent configuration",
           "properties": {
             "replicaCount": {
               "type": "integer",
@@ -212,8 +203,7 @@
               "properties": {
                 "repository": {
                   "type": "string",
-                  "description": "Docker image repository for TeamCity Agent",
-                  "default": "jetbrains/teamcity-agent"
+                  "description": "Docker image repository for TeamCity Agent"
                 },
                 "tag": {
                   "type": "string",
@@ -226,7 +216,7 @@
                   "default": "Always"
                 }
               },
-              "required": ["repository", "tag", "pullPolicy"]
+              "required": ["repository", "pullPolicy"]
             },
             "env": {
               "type": ["array", "null"],
@@ -235,7 +225,7 @@
                 "type": "object",
                 "properties": {
                   "name": { "type": "string" },
-                  "value": {}
+                  "value": { "type": ["string", "boolean", "number"] }
                 },
                 "required": ["name", "value"]
               }
@@ -248,8 +238,7 @@
                   "properties": {
                     "memory": {
                       "type": "string",
-                      "description": "Minimum amount of memory requested for each agent container",
-                      "default": "2Gi"
+                      "description": "Minimum amount of memory requested for each agent container"
                     }
                   },
                   "required": ["memory"]
@@ -299,7 +288,8 @@
       "properties": {
         "annotations": {
           "type": ["object", "null"],
-          "description": "Annotations to customize the behavior of the ingress controller"
+          "description": "Annotations to customize the behavior of the ingress controller",
+          "additionalProperties": { "type": "string" }
         },
         "className": {
           "type": "string",
@@ -373,9 +363,5 @@
       "required": ["className"]
     }
   },
-  "required": [
-    "nameOverride",
-    "fullnameOverride",
-    "teamcity"
-  ]
+  "required": ["teamcity"]
 }

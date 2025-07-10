@@ -20,10 +20,6 @@ teamcity:
       pullPolicy: IfNotPresent
 
     # Environment variables for TeamCity server container
-    # Example:
-    # env:
-    #   - name: AGENT_NAME
-    #     value: "custom-agent"
     env:
       - name: TEAMCITY_HTTPS_PROXY_ENABLED
         value: true
@@ -37,8 +33,11 @@ teamcity:
     # Example:
     # volumeMounts:
     #   - name: teamcity
-    #     mountPath: /data/teamcity_server/datadir
+    #     mountPath: /var/lib/teamcity/server/data
     #     subPath: server/data
+    #   - name: teamcity
+    #     mountPath: /var/lib/teamcity/server/logs
+    #     subPath: server/logs
     volumeMounts: null
 
     # Default port for the TeamCity HTTP service (web UI and API)
@@ -55,6 +54,7 @@ teamcity:
           targetPort: 8111
           protocol: TCP
 
+  # TeamCity Database configuration
   database:
     # Number of server replicas/pods to run (should typically be 1)
     replicaCount: 1
@@ -86,7 +86,7 @@ teamcity:
     # volumeMounts:
     #   - name: teamcity
     #     mountPath: /var/lib/postgresql/data
-    #     subPath: postgres/data
+    #     subPath: postgresql/data
     volumeMounts: null
 
   # TeamCity Agent configuration

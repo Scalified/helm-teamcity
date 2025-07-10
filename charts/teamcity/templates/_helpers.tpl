@@ -38,7 +38,6 @@ helm.sh/chart: {{ include "teamcity.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-app.kubernetes.io/component: server
 {{- end }}
 
 {{/*
@@ -76,7 +75,6 @@ helm.sh/chart: {{ include "teamcity.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-app.kubernetes.io/component: agent
 {{- end }}
 
 {{/*
