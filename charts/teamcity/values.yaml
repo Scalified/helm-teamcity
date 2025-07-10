@@ -33,10 +33,10 @@ teamcity:
     # Example:
     # volumeMounts:
     #   - name: teamcity
-    #     mountPath: /var/lib/teamcity/server/data
+    #     mountPath: /data/teamcity_server/datadir
     #     subPath: server/data
     #   - name: teamcity
-    #     mountPath: /var/lib/teamcity/server/logs
+    #     mountPath: /opt/teamcity/logs
     #     subPath: server/logs
     volumeMounts: null
 

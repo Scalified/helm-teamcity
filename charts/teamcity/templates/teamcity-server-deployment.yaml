@@ -58,7 +58,7 @@ spec:
             failureThreshold: 5
           resources:
 {{ toYaml .Values.teamcity.server.resources | indent 12 }}
-{{- if .Values.volumeMounts }}
+{{- if .Values.teamcity.server.volumeMounts }}
           volumeMounts:
 {{ toYaml .Values.teamcity.server.volumeMounts | indent 12 }}
 {{- end }}
@@ -97,7 +97,7 @@ spec:
             timeoutSeconds: 2
           resources:
 {{ toYaml .Values.teamcity.server.resources | indent 12 }}
-{{- if .Values.volumeMounts }}
+{{- if .Values.teamcity.server.volumeMounts }}
           volumeMounts:
 {{ toYaml .Values.teamcity.server.volumeMounts | indent 12 }}
 {{- end }}
