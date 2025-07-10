@@ -96,10 +96,10 @@ spec:
             successThreshold: 1
             timeoutSeconds: 2
           resources:
-{{ toYaml .Values.teamcity.server.resources | indent 12 }}
-{{- if .Values.teamcity.server.volumeMounts }}
+{{ toYaml .Values.teamcity.database.resources | indent 12 }}
+{{- if .Values.teamcity.database.volumeMounts }}
           volumeMounts:
-{{ toYaml .Values.teamcity.server.volumeMounts | indent 12 }}
+{{ toYaml .Values.teamcity.database.volumeMounts | indent 12 }}
 {{- end }}
       restartPolicy: Always
 {{- if .Values.volumes }}
