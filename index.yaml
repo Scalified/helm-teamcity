@@ -8,6 +8,36 @@ entries:
         url: https://keybase.io/scalified/pgp_keys.asc
     apiVersion: v2
     appVersion: 2025.03.3
+    created: "2025-07-11T13:00:59.109954211Z"
+    description: TeamCity Helm Chart
+    digest: 6e1b8dbbdbb35f6d665e3399f1bf376ce937bac58671f8a95eaa923e1d37a8ed
+    home: https://github.com/Scalified/helm-teamcity
+    icon: https://scalified.github.io/helm-teamcity/icon.png
+    keywords:
+    - jetbrains
+    - teamcity
+    - ci
+    - cd
+    - continuous-integration
+    - build-server
+    - devops
+    kubeVersion: '>= 1.13.0'
+    maintainers:
+    - email: vld.x@hotmail.com
+      name: Vladyslav Baidak
+      url: https://scalified.com
+    name: teamcity
+    type: application
+    urls:
+    - https://github.com/Scalified/helm-teamcity/releases/download/teamcity-0.0.10/teamcity-0.0.10.tgz
+    version: 0.0.10
+  - annotations:
+      artifacthub.io/category: integration-delivery
+      artifacthub.io/signKey: |
+        fingerprint: 687D9BE990493C58C0CFBEB65A065879383D7E21
+        url: https://keybase.io/scalified/pgp_keys.asc
+    apiVersion: v2
+    appVersion: 2025.03.3
     created: "2025-07-11T12:23:35.107022825Z"
     description: TeamCity Helm Chart
     digest: b7393de499fc73b224f9119d17526f905b7e0c1f28b03163914cd3ef0ea21ac6
@@ -241,4 +271,4 @@ entries:
     urls:
     - https://github.com/Scalified/helm-teamcity/releases/download/teamcity-0.0.2/teamcity-0.0.2.tgz
     version: 0.0.2
-generated: "2025-07-11T12:23:35.107060776Z"
+generated: "2025-07-11T13:00:59.109989157Z"
