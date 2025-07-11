@@ -28,21 +28,45 @@
                 "image": {
                   "type": "object",
                   "properties": {
-                    "repository": { "type": "string", "default": "jetbrains/teamcity-server" },
-                    "tag": { "type": "string", "default": "" },
-                    "pullPolicy": { "type": "string", "default": "IfNotPresent", "enum": ["Always", "IfNotPresent", "Never"] }
+                    "repository": {
+                      "type": "string",
+                      "default": "jetbrains/teamcity-server"
+                    },
+                    "tag": {
+                      "type": "string",
+                      "default": ""
+                    },
+                    "pullPolicy": {
+                      "type": "string",
+                      "default": "IfNotPresent",
+                      "enum": [
+                        "Always",
+                        "IfNotPresent",
+                        "Never"
+                      ]
+                    }
                   },
-                  "required": ["repository", "pullPolicy"]
+                  "required": [
+                    "repository",
+                    "pullPolicy"
+                  ]
                 },
                 "env": {
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
-                      "name": { "type": "string" },
-                      "value": { "type": "string" }
+                      "name": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
                     },
-                    "required": ["name", "value"]
+                    "required": [
+                      "name",
+                      "value"
+                    ]
                   }
                 },
                 "resources": {
@@ -51,23 +75,42 @@
                     "requests": {
                       "type": "object",
                       "properties": {
-                        "memory": { "type": "string", "default": "4Gi" }
+                        "memory": {
+                          "type": "string",
+                          "default": "4Gi"
+                        }
                       },
-                      "required": ["memory"]
+                      "required": [
+                        "memory"
+                      ]
                     }
                   },
-                  "required": ["requests"]
+                  "required": [
+                    "requests"
+                  ]
                 },
                 "volumeMounts": {
-                  "type": ["array", "null"],
+                  "type": [
+                    "array",
+                    "null"
+                  ],
                   "items": {
                     "type": "object",
                     "properties": {
-                      "name": { "type": "string" },
-                      "mountPath": { "type": "string" },
-                      "subPath": { "type": "string" }
+                      "name": {
+                        "type": "string"
+                      },
+                      "mountPath": {
+                        "type": "string"
+                      },
+                      "subPath": {
+                        "type": "string"
+                      }
                     },
-                    "required": ["name", "mountPath"]
+                    "required": [
+                      "name",
+                      "mountPath"
+                    ]
                   }
                 },
                 "port": {
@@ -75,7 +118,11 @@
                   "default": 8111
                 }
               },
-              "required": ["image", "resources", "port"]
+              "required": [
+                "image",
+                "resources",
+                "port"
+              ]
             },
             "database": {
               "type": "object",
@@ -83,21 +130,46 @@
                 "image": {
                   "type": "object",
                   "properties": {
-                    "repository": { "type": "string", "default": "postgres" },
-                    "tag": { "type": "string", "default": "14" },
-                    "pullPolicy": { "type": "string", "default": "IfNotPresent", "enum": ["Always", "IfNotPresent", "Never"] }
+                    "repository": {
+                      "type": "string",
+                      "default": "postgres"
+                    },
+                    "tag": {
+                      "type": "string",
+                      "default": "14"
+                    },
+                    "pullPolicy": {
+                      "type": "string",
+                      "default": "IfNotPresent",
+                      "enum": [
+                        "Always",
+                        "IfNotPresent",
+                        "Never"
+                      ]
+                    }
                   },
-                  "required": ["repository", "tag", "pullPolicy"]
+                  "required": [
+                    "repository",
+                    "tag",
+                    "pullPolicy"
+                  ]
                 },
                 "env": {
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
-                      "name": { "type": "string" },
-                      "value": { "type": "string" }
+                      "name": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
                     },
-                    "required": ["name", "value"]
+                    "required": [
+                      "name",
+                      "value"
+                    ]
                   }
                 },
                 "resources": {
@@ -106,60 +178,108 @@
                     "requests": {
                       "type": "object",
                       "properties": {
-                        "memory": { "type": "string", "default": "2Gi" }
+                        "memory": {
+                          "type": "string",
+                          "default": "2Gi"
+                        }
                       },
-                      "required": ["memory"]
+                      "required": [
+                        "memory"
+                      ]
                     }
                   },
-                  "required": ["requests"]
+                  "required": [
+                    "requests"
+                  ]
                 },
                 "volumeMounts": {
-                  "type": ["array", "null"],
+                  "type": [
+                    "array",
+                    "null"
+                  ],
                   "items": {
                     "type": "object",
                     "properties": {
-                      "name": { "type": "string" },
-                      "mountPath": { "type": "string" },
-                      "subPath": { "type": "string" }
+                      "name": {
+                        "type": "string"
+                      },
+                      "mountPath": {
+                        "type": "string"
+                      },
+                      "subPath": {
+                        "type": "string"
+                      }
                     },
-                    "required": ["name", "mountPath"]
+                    "required": [
+                      "name",
+                      "mountPath"
+                    ]
                   }
                 }
               },
-              "required": ["image", "resources"]
+              "required": [
+                "image",
+                "resources"
+              ]
             }
           },
-          "required": ["server", "database"]
+          "required": [
+            "server",
+            "database"
+          ]
         },
         "hostname": {
           "type": "string",
           "default": "teamcity-server"
         },
         "volumes": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "items": {
             "type": "object",
             "properties": {
-              "name": { "type": "string" },
+              "name": {
+                "type": "string"
+              },
               "persistentVolumeClaim": {
                 "type": "object",
                 "properties": {
-                  "claimName": { "type": "string" }
+                  "claimName": {
+                    "type": "string"
+                  }
                 },
-                "required": ["claimName"]
+                "required": [
+                  "claimName"
+                ]
               },
               "hostPath": {
                 "type": "object",
                 "properties": {
-                  "path": { "type": "string" }
+                  "path": {
+                    "type": "string"
+                  }
                 },
-                "required": ["path"]
+                "required": [
+                  "path"
+                ]
               }
             },
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "oneOf": [
-              { "required": ["persistentVolumeClaim"] },
-              { "required": ["hostPath"] }
+              {
+                "required": [
+                  "persistentVolumeClaim"
+                ]
+              },
+              {
+                "required": [
+                  "hostPath"
+                ]
+              }
             ]
           }
         },
@@ -169,55 +289,99 @@
             "type": {
               "type": "string",
               "default": "ClusterIP",
-              "enum": ["ClusterIP", "NodePort", "LoadBalancer"]
+              "enum": [
+                "ClusterIP",
+                "NodePort",
+                "LoadBalancer"
+              ]
             },
             "ports": {
               "type": "array",
               "items": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string" },
-                  "port": { "type": "integer" },
-                  "targetPort": { "type": "integer" },
-                  "protocol": { "type": "string", "default": "TCP" }
+                  "name": {
+                    "type": "string"
+                  },
+                  "port": {
+                    "type": "integer"
+                  },
+                  "targetPort": {
+                    "type": "integer"
+                  },
+                  "protocol": {
+                    "type": "string",
+                    "default": "TCP"
+                  }
                 },
-                "required": ["name", "port", "targetPort", "protocol"]
+                "required": [
+                  "name",
+                  "port",
+                  "targetPort",
+                  "protocol"
+                ]
               }
             }
           },
-          "required": ["type", "ports"]
+          "required": [
+            "type",
+            "ports"
+          ]
         },
         "ingress": {
-          "type": ["object", "null"],
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "annotations": {
-              "type": ["object", "null"],
-              "additionalProperties": { "type": "string" }
+              "type": [
+                "object",
+                "null"
+              ],
+              "additionalProperties": {
+                "type": "string"
+              }
             },
             "className": {
               "type": "string",
               "default": "nginx"
             },
             "tls": {
-              "type": ["array", "null"],
+              "type": [
+                "array",
+                "null"
+              ],
               "items": {
                 "type": "object",
                 "properties": {
                   "hosts": {
                     "type": "array",
-                    "items": { "type": "string" }
+                    "items": {
+                      "type": "string"
+                    }
                   },
-                  "secretName": { "type": "string" }
+                  "secretName": {
+                    "type": "string"
+                  }
                 },
-                "required": ["hosts", "secretName"]
+                "required": [
+                  "hosts",
+                  "secretName"
+                ]
               }
             },
             "rules": {
-              "type": ["array", "null"],
+              "type": [
+                "array",
+                "null"
+              ],
               "items": {
                 "type": "object",
                 "properties": {
-                  "host": { "type": "string" },
+                  "host": {
+                    "type": "string"
+                  },
                   "http": {
                     "type": "object",
                     "properties": {
@@ -226,43 +390,72 @@
                         "items": {
                           "type": "object",
                           "properties": {
-                            "path": { "type": "string" },
-                            "pathType": { "type": "string" },
+                            "path": {
+                              "type": "string"
+                            },
+                            "pathType": {
+                              "type": "string"
+                            },
                             "backend": {
                               "type": "object",
                               "properties": {
                                 "service": {
                                   "type": "object",
                                   "properties": {
-                                    "name": { "type": "string" },
+                                    "name": {
+                                      "type": "string"
+                                    },
                                     "port": {
                                       "type": "object",
                                       "properties": {
-                                        "number": { "type": "integer" }
+                                        "number": {
+                                          "type": "integer"
+                                        }
                                       },
-                                      "required": ["number"]
+                                      "required": [
+                                        "number"
+                                      ]
                                     }
                                   },
-                                  "required": ["name", "port"]
+                                  "required": [
+                                    "name",
+                                    "port"
+                                  ]
                                 }
                               },
-                              "required": ["service"]
+                              "required": [
+                                "service"
+                              ]
                             }
                           },
-                          "required": ["path", "pathType", "backend"]
+                          "required": [
+                            "path",
+                            "pathType",
+                            "backend"
+                          ]
                         }
                       }
                     },
-                    "required": ["paths"]
+                    "required": [
+                      "paths"
+                    ]
                   }
                 },
-                "required": ["host", "http"]
+                "required": [
+                  "host",
+                  "http"
+                ]
               }
             }
           }
         }
       },
-      "required": ["replicaCount", "containers", "hostname", "service"]
+      "required": [
+        "replicaCount",
+        "containers",
+        "hostname",
+        "service"
+      ]
     },
     "agent": {
       "type": "object",
@@ -281,21 +474,45 @@
                 "image": {
                   "type": "object",
                   "properties": {
-                    "repository": { "type": "string", "default": "jetbrains/teamcity-agent" },
-                    "tag": { "type": "string", "default": "" },
-                    "pullPolicy": { "type": "string", "default": "Always", "enum": ["Always", "IfNotPresent", "Never"] }
+                    "repository": {
+                      "type": "string",
+                      "default": "jetbrains/teamcity-agent"
+                    },
+                    "tag": {
+                      "type": "string",
+                      "default": ""
+                    },
+                    "pullPolicy": {
+                      "type": "string",
+                      "default": "Always",
+                      "enum": [
+                        "Always",
+                        "IfNotPresent",
+                        "Never"
+                      ]
+                    }
                   },
-                  "required": ["repository", "pullPolicy"]
+                  "required": [
+                    "repository",
+                    "pullPolicy"
+                  ]
                 },
                 "env": {
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
-                      "name": { "type": "string" },
-                      "value": { "type": "string" }
+                      "name": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
                     },
-                    "required": ["name", "value"]
+                    "required": [
+                      "name",
+                      "value"
+                    ]
                   }
                 },
                 "resources": {
@@ -304,85 +521,185 @@
                     "requests": {
                       "type": "object",
                       "properties": {
-                        "memory": { "type": "string", "default": "2Gi" }
+                        "memory": {
+                          "type": "string",
+                          "default": "2Gi"
+                        }
                       },
-                      "required": ["memory"]
+                      "required": [
+                        "memory"
+                      ]
                     }
                   },
-                  "required": ["requests"]
+                  "required": [
+                    "requests"
+                  ]
                 },
                 "volumeMounts": {
-                  "type": ["array", "null"],
+                  "type": [
+                    "array",
+                    "null"
+                  ],
                   "items": {
                     "type": "object",
                     "properties": {
-                      "name": { "type": "string" },
-                      "mountPath": { "type": "string" }
+                      "name": {
+                        "type": "string"
+                      },
+                      "mountPath": {
+                        "type": "string"
+                      }
                     },
-                    "required": ["name", "mountPath"]
+                    "required": [
+                      "name",
+                      "mountPath"
+                    ]
                   }
                 }
               },
-              "required": ["image", "resources"]
+              "required": [
+                "image",
+                "resources"
+              ]
             }
           },
-          "required": ["agent"]
+          "required": [
+            "agent"
+          ]
         },
         "hostname": {
           "type": "string",
           "default": "teamcity-agent"
         },
         "volumes": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "items": {
             "type": "object",
             "properties": {
-              "name": { "type": "string" },
+              "name": {
+                "type": "string"
+              },
               "persistentVolumeClaim": {
                 "type": "object",
                 "properties": {
-                  "claimName": { "type": "string" }
+                  "claimName": {
+                    "type": "string"
+                  }
                 },
-                "required": ["claimName"]
+                "required": [
+                  "claimName"
+                ]
               },
               "hostPath": {
                 "type": "object",
                 "properties": {
-                  "path": { "type": "string" }
+                  "path": {
+                    "type": "string"
+                  }
                 },
-                "required": ["path"]
+                "required": [
+                  "path"
+                ]
               }
             },
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "oneOf": [
-              { "required": ["persistentVolumeClaim"] },
-              { "required": ["hostPath"] }
+              {
+                "required": [
+                  "persistentVolumeClaim"
+                ]
+              },
+              {
+                "required": [
+                  "hostPath"
+                ]
+              }
             ]
           }
         },
         "volumeClaimTemplates": {
-          "type": "object",
-          "properties": {
-            "resources": {
-              "type": "object",
-              "properties": {
-                "requests": {
-                  "type": "object",
-                  "properties": {
-                    "storage": { "type": "string", "default": "1Gi" }
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "metadata": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
                   },
-                  "required": ["storage"]
+                  "annotations": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  }
                 },
-                "storageClassName": { "type": "string", "default": "standard" }
+                "required": [
+                  "name"
+                ]
               },
-              "required": ["requests", "storageClassName"]
-            }
-          },
-          "required": ["resources"]
+              "spec": {
+                "type": "object",
+                "properties": {
+                  "accessModes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "resources": {
+                    "type": "object",
+                    "properties": {
+                      "requests": {
+                        "type": "object",
+                        "properties": {
+                          "storage": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "storage"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "requests"
+                    ]
+                  },
+                  "storageClassName": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "accessModes",
+                  "resources",
+                  "storageClassName"
+                ]
+              }
+            },
+            "required": [
+              "metadata",
+              "spec"
+            ]
+          }
         }
       },
-      "required": ["replicaCount", "containers", "hostname", "volumeClaimTemplates"]
+      "required": [
+        "replicaCount",
+        "containers",
+        "hostname",
+        "volumeClaimTemplates"
+      ]
     }
   },
-  "required": ["server", "agent"]
+  "required": [
+    "server",
+    "agent"
+  ]
 }

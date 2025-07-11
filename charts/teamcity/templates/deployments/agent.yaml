@@ -43,12 +43,7 @@ spec:
       volumes:
 {{ toYaml .Values.agent.volumes | indent 8 }}
 {{- end }}
+{{- if .Values.agent.volumeClaimTemplates }}
   volumeClaimTemplates:
-    - metadata:
-        name: agent-config
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: {{ .Values.agent.volumeClaimTemplates.resources.requests.storage | default "1Gi" }}
-        storageClassName: {{ .Values.agent.volumeClaimTemplates.resources.storageClassName | quote }}
+{{ toYaml .Values.agent.volumeClaimTemplates | indent 4 }}
+{{- end }}

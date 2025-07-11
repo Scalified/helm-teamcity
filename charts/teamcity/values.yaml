@@ -182,9 +182,15 @@ agent:
 
   # Persistent volume claim templates for TeamCity Agent pods
   volumeClaimTemplates:
-    resources:
-      requests:
-        # Storage size requested for each agent's persistent volume
-        storage: 1Gi
-      # Storage class to use for agent volumes
-      storageClassName: standard
+    - metadata:
+        name: agent-config
+        annotations:
+          longhorn.io/auto-created-for-pvc: "true"
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            # Storage size requested for each agent's persistent volume
+            storage: 1Gi
+        # Storage class to use for agent volumes
+        storageClassName: standard
