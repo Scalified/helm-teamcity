@@ -101,6 +101,7 @@ spec:
           volumeMounts:
 {{ toYaml .Values.server.containers.database.volumeMounts | indent 12 }}
 {{- end }}
+      hostname: {{ .Values.server.hostname }}
       restartPolicy: Always
 {{- if .Values.server.volumes }}
       volumes:

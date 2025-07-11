@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "teamcity.agent.fullname" . }}
+  labels:
+    {{- include "teamcity.agent.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.agent.replicaCount }}
+  serviceName: {{ include "teamcity.agent.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "teamcity.agent.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "teamcity.agent.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: teamcity-agent
+          image: "{{ .Values.agent.containers.agent.image.repository }}:{{ .Values.agent.containers.agent.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.agent.containers.agent.image.pullPolicy }}
+          env:
+            - name: AGENT_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+{{- if .Values.agent.containers.agent.env }}
+{{ toYaml .Values.agent.containers.agent.env | indent 12 }}
+{{- end }}
+{{- if .Values.agent.containers.agent.resources }}
+          resources:
+{{ toYaml .Values.agent.containers.agent.resources | indent 12 }}
+{{- end }}
+          volumeMounts:
+            - name: agent-config
+              mountPath: /data/teamcity_agent/conf
+{{- if .Values.agent.containers.agent.volumeMounts }}
+{{ toYaml .Values.agent.containers.agent.volumeMounts | indent 12 }}
+{{- end }}
+      hostname: {{ .Values.agent.hostname }}
+      restartPolicy: Always
+{{- if .Values.agent.volumes }}
+      volumes:
+{{ toYaml .Values.agent.volumes | indent 8 }}
+{{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        name: agent-config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.agent.volumeClaimTemplates.resources.requests.storage | default "1Gi" }}
+        storageClassName: {{ .Values.agent.volumeClaimTemplates.resources.storageClassName | quote }}

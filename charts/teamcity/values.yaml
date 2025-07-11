@@ -6,7 +6,6 @@ fullnameOverride: ""
 
 # TeamCity Server configuration
 server:
-
   # Number of server replicas/pods to run (should typically be 1)
   replicaCount: 1
 
@@ -42,9 +41,9 @@ server:
       #     subPath: server/logs
       volumeMounts: null
 
-      # Default port for the TeamCity HTTP service (web UI and API)
+      # Default port for the TeamCity Server HTTP service (web UI and API)
       port: 8111
-    
+
     database:
       image:
         # Docker image repository for TeamCity Server
@@ -75,6 +74,9 @@ server:
       #     mountPath: /var/lib/postgresql/data
       #     subPath: postgresql/data
       volumeMounts: null
+
+  # Hostname used for the TeamCity Server pod/container
+  hostname: teamcity-server
 
   # Additional volumes to be mounted into the pods
   # Example:
@@ -134,7 +136,6 @@ server:
 
 # TeamCity Agent configuration
 agent:
-
   # Number of agent replicas/pods to run
   replicaCount: 3
 
@@ -150,11 +151,9 @@ agent:
         pullPolicy: Always
 
       # Environment variables for TeamCity Agent containers
-      # Example:
-      # env:
-      #   - name: AGENT_NAME
-      #     value: "custom-agent"
-      env: null
+      env:
+        - name: SERVER_URL
+          value: "http://teamcity-server:8111"
 
       resources:
         requests:
@@ -168,6 +167,9 @@ agent:
       #     mountPath: /dev/urandom
       volumeMounts: null
 
+  # Hostname used for the TeamCity Agent pod/container
+  hostname: teamcity-agent
+
   # Additional volumes to be mounted into the pods
   # Example:
   # volumes:
@@ -175,3 +177,12 @@ agent:
   #     persistentVolumeClaim:
   #       claimName: teamcity
   volumes: null
+
+  # Persistent volume claim templates for TeamCity Agent pods
+  volumeClaimTemplates:
+    resources:
+      requests:
+        # Storage size requested for each agent's persistent volume
+        storage: 1Gi
+      # Storage class to use for agent volumes
+      storageClassName: standard
