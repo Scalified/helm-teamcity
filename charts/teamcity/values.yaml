@@ -176,6 +176,8 @@ agent:
   #   - name: teamcity
   #     persistentVolumeClaim:
   #       claimName: teamcity
+  #   - name: urandom
+  #     path: /dev/urandom
   volumes: null
 
   # Persistent volume claim templates for TeamCity Agent pods

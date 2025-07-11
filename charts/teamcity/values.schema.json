@@ -147,9 +147,20 @@
                   "claimName": { "type": "string" }
                 },
                 "required": ["claimName"]
+              },
+              "hostPath": {
+                "type": "object",
+                "properties": {
+                  "path": { "type": "string" }
+                },
+                "required": ["path"]
               }
             },
-            "required": ["name", "persistentVolumeClaim"]
+            "required": ["name"],
+            "oneOf": [
+              { "required": ["persistentVolumeClaim"] },
+              { "required": ["hostPath"] }
+            ]
           }
         },
         "service": {
@@ -333,9 +344,20 @@
                   "claimName": { "type": "string" }
                 },
                 "required": ["claimName"]
+              },
+              "hostPath": {
+                "type": "object",
+                "properties": {
+                  "path": { "type": "string" }
+                },
+                "required": ["path"]
               }
             },
-            "required": ["name", "persistentVolumeClaim"]
+            "required": ["name"],
+            "oneOf": [
+              { "required": ["persistentVolumeClaim"] },
+              { "required": ["hostPath"] }
+            ]
           }
         },
         "volumeClaimTemplates": {

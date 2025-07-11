@@ -9,7 +9,7 @@ spec:
   selector:
     {{- include "teamcity.server.selectorLabels" . | nindent 4 }}
   type: {{ .Values.server.service.type }}
-  {{- if .Values.server.service.ports }}
+{{- if .Values.server.service.ports }}
   ports:
 {{ toYaml .Values.server.service.ports | indent 4 }}
   {{- end }}
