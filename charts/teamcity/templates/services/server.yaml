@@ -1,4 +1,4 @@
-{{- if .Values.teamcity.server.service -}}
+{{- if .Values.server.service -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -8,9 +8,9 @@ metadata:
 spec:
   selector:
     {{- include "teamcity.server.selectorLabels" . | nindent 4 }}
-  type: {{ .Values.teamcity.server.service.type }}
-  {{- if .Values.teamcity.server.service.ports }}
+  type: {{ .Values.server.service.type }}
+  {{- if .Values.server.service.ports }}
   ports:
-{{ toYaml .Values.teamcity.server.service.ports | indent 4 }}
+{{ toYaml .Values.server.service.ports | indent 4 }}
   {{- end }}
 {{- end }}

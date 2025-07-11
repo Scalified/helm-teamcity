@@ -1,6 +1,7 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "TeamCity Helm Chart Values",
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "TeamCity Helm Chart Values Schema",
+  "description": "Schema for validating values.yaml for TeamCity Helm chart.",
   "type": "object",
   "properties": {
     "nameOverride": {
@@ -13,355 +14,333 @@
       "description": "Override the full name (default is the chart name + release name)",
       "default": ""
     },
-    "teamcity": {
+    "server": {
       "type": "object",
+      "description": "TeamCity Server configuration",
       "properties": {
-        "server": {
+        "replicaCount": {
+          "type": "integer",
+          "description": "Number of server replicas/pods to run (should typically be 1)",
+          "default": 1,
+          "minimum": 1
+        },
+        "containers": {
           "type": "object",
           "properties": {
-            "replicaCount": {
-              "type": "integer",
-              "description": "Number of server replicas/pods to run (should typically be 1)",
-              "default": 1
-            },
-            "image": {
+            "server": {
               "type": "object",
               "properties": {
-                "repository": {
-                  "type": "string",
-                  "description": "Docker image repository for TeamCity Server"
-                },
-                "tag": {
-                  "type": "string",
-                  "description": "Image tag to use (leave empty to use default from Chart or latest)",
-                  "default": ""
-                },
-                "pullPolicy": {
-                  "type": "string",
-                  "description": "Image pull policy (e.g., Always, IfNotPresent, Never)",
-                  "default": "IfNotPresent"
-                }
-              },
-              "required": ["repository", "pullPolicy"]
-            },
-            "env": {
-              "type": "array",
-              "description": "Environment variables for TeamCity server container",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": { "type": "string" },
-                  "value": { "type": "string" }
-                },
-                "required": ["name", "value"]
-              }
-            },
-            "resources": {
-              "type": "object",
-              "properties": {
-                "requests": {
+                "image": {
                   "type": "object",
                   "properties": {
-                    "memory": {
-                      "type": "string",
-                      "description": "Minimum amount of memory requested for the server container"
-                    }
+                    "repository": { "type": "string", "description": "Docker image repository for TeamCity Server" },
+                    "tag": { "type": "string", "description": "Image tag to use" },
+                    "pullPolicy": { "type": "string", "description": "Image pull policy", "enum": ["Always", "IfNotPresent", "Never"] }
                   },
-                  "required": ["memory"]
-                }
-              },
-              "required": ["requests"]
-            },
-            "volumeMounts": {
-              "type": ["array", "null"],
-              "description": "Additional volume mounts for containers",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": { "type": "string" },
-                  "mountPath": { "type": "string" },
-                  "subPath": { "type": "string" }
+                  "required": ["repository", "pullPolicy"]
                 },
-                "required": ["name", "mountPath"]
-              }
-            },
-            "port": {
-              "type": "integer",
-              "description": "Default port for the TeamCity HTTP service (web UI and API)",
-              "default": 8111
-            },
-            "service": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "description": "Kubernetes service type (e.g., ClusterIP, NodePort, LoadBalancer)",
-                  "default": "ClusterIP"
-                },
-                "ports": {
+                "env": {
                   "type": "array",
-                  "description": "List of ports to expose via the service",
                   "items": {
                     "type": "object",
                     "properties": {
                       "name": { "type": "string" },
-                      "port": { "type": "integer" },
-                      "targetPort": { "type": "integer" },
-                      "protocol": { "type": "string" }
+                      "value": { "type": "string" }
                     },
-                    "required": ["name", "port", "targetPort", "protocol"]
+                    "required": ["name", "value"]
                   }
-                }
-              },
-              "required": ["type", "ports"]
-            }
-          },
-          "required": ["replicaCount", "image", "resources", "port", "service"]
-        },
-        "database": {
-          "type": "object",
-          "properties": {
-            "replicaCount": {
-              "type": "integer",
-              "description": "Number of server replicas/pods to run (should typically be 1)",
-              "default": 1
-            },
-            "image": {
-              "type": "object",
-              "properties": {
-                "repository": {
-                  "type": "string",
-                  "description": "Docker image repository for TeamCity Server"
                 },
-                "tag": {
-                  "type": "string",
-                  "description": "Image tag to use (leave empty to use default from Chart or latest)",
-                  "default": "14"
-                },
-                "pullPolicy": {
-                  "type": "string",
-                  "description": "Image pull policy (e.g., Always, IfNotPresent, Never)",
-                  "default": "IfNotPresent"
-                }
-              },
-              "required": ["repository", "tag", "pullPolicy"]
-            },
-            "env": {
-              "type": "array",
-              "description": "Environment variables for TeamCity database container",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": { "type": "string" },
-                  "value": { "type": ["string", "boolean", "number"] }
-                },
-                "required": ["name", "value"]
-              }
-            },
-            "resources": {
-              "type": "object",
-              "properties": {
-                "requests": {
+                "resources": {
                   "type": "object",
                   "properties": {
-                    "memory": {
-                      "type": "string",
-                      "description": "Minimum amount of memory requested for the server container"
-                    }
-                  },
-                  "required": ["memory"]
-                }
-              },
-              "required": ["requests"]
-            },
-            "volumeMounts": {
-              "type": ["array", "null"],
-              "description": "Additional volume mounts for containers",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": { "type": "string" },
-                  "mountPath": { "type": "string" },
-                  "subPath": { "type": "string" }
-                },
-                "required": ["name", "mountPath"]
-              }
-            }
-          },
-          "required": ["replicaCount", "image", "resources"]
-        },
-        "agent": {
-          "type": "object",
-          "properties": {
-            "replicaCount": {
-              "type": "integer",
-              "description": "Number of agent replicas/pods to run",
-              "default": 3
-            },
-            "image": {
-              "type": "object",
-              "properties": {
-                "repository": {
-                  "type": "string",
-                  "description": "Docker image repository for TeamCity Agent"
-                },
-                "tag": {
-                  "type": "string",
-                  "description": "Image tag to use (leave empty to use default from Chart or latest)",
-                  "default": ""
-                },
-                "pullPolicy": {
-                  "type": "string",
-                  "description": "Image pull policy (e.g., Always, IfNotPresent, Never)",
-                  "default": "Always"
-                }
-              },
-              "required": ["repository", "pullPolicy"]
-            },
-            "env": {
-              "type": ["array", "null"],
-              "description": "Environment variables for TeamCity Agent containers",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": { "type": "string" },
-                  "value": { "type": ["string", "boolean", "number"] }
-                },
-                "required": ["name", "value"]
-              }
-            },
-            "resources": {
-              "type": "object",
-              "properties": {
-                "requests": {
-                  "type": "object",
-                  "properties": {
-                    "memory": {
-                      "type": "string",
-                      "description": "Minimum amount of memory requested for each agent container"
-                    }
-                  },
-                  "required": ["memory"]
-                }
-              },
-              "required": ["requests"]
-            },
-            "volumeMounts": {
-              "type": ["array", "null"],
-              "description": "Additional volume mounts for TeamCity Agent containers",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": { "type": "string" },
-                  "mountPath": { "type": "string" }
-                },
-                "required": ["name", "mountPath"]
-              }
-            }
-          },
-          "required": ["replicaCount", "image", "resources"]
-        }
-      },
-      "required": ["server", "database", "agent"]
-    },
-    "volumes": {
-      "type": ["array", "null"],
-      "description": "Additional volumes to be mounted into the pods",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "persistentVolumeClaim": {
-            "type": "object",
-            "properties": {
-              "claimName": { "type": "string" }
-            },
-            "required": ["claimName"]
-          }
-        },
-        "required": ["name", "persistentVolumeClaim"]
-      }
-    },
-    "ingress": {
-      "type": ["object", "null"],
-      "description": "Configuration for Ingress to expose TeamCity Server via HTTP/HTTPS",
-      "properties": {
-        "annotations": {
-          "type": ["object", "null"],
-          "description": "Annotations to customize the behavior of the ingress controller",
-          "additionalProperties": { "type": "string" }
-        },
-        "className": {
-          "type": "string",
-          "description": "Ingress class name (used to select the Ingress controller, e.g., nginx or traefik)",
-          "default": "nginx"
-        },
-        "tls": {
-          "type": ["array", "null"],
-          "description": "TLS configuration for the ingress",
-          "items": {
-            "type": "object",
-            "properties": {
-              "hosts": {
-                "type": "array",
-                "items": { "type": "string" }
-              },
-              "secretName": { "type": "string" }
-            },
-            "required": ["hosts", "secretName"]
-          }
-        },
-        "rules": {
-          "type": ["array", "null"],
-          "description": "List of ingress rules",
-          "items": {
-            "type": "object",
-            "properties": {
-              "host": { "type": "string" },
-              "http": {
-                "type": "object",
-                "properties": {
-                  "paths": {
-                    "type": "array",
-                    "items": {
+                    "requests": {
                       "type": "object",
                       "properties": {
-                        "path": { "type": "string" },
-                        "pathType": { "type": "string" },
-                        "backend": {
-                          "type": "object",
-                          "properties": {
-                            "service": {
-                              "type": "object",
-                              "properties": {
-                                "name": { "type": "string" },
-                                "port": {
-                                  "type": "object",
-                                  "properties": {
-                                    "number": { "type": "integer" }
-                                  },
-                                  "required": ["number"]
-                                }
-                              },
-                              "required": ["name", "port"]
-                            }
-                          },
-                          "required": ["service"]
-                        }
+                        "memory": { "type": "string", "description": "Minimum amount of memory requested for the server container" }
                       },
-                      "required": ["path", "pathType", "backend"]
+                      "required": ["memory"]
                     }
+                  },
+                  "required": ["requests"]
+                },
+                "volumeMounts": {
+                  "description": "Additional volume mounts for containers",
+                  "type": ["array", "null"],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "mountPath": { "type": "string" },
+                      "subPath": { "type": "string" }
+                    },
+                    "required": ["name", "mountPath"]
                   }
                 },
-                "required": ["paths"]
+                "port": {
+                  "type": "integer",
+                  "description": "Default port for the TeamCity HTTP service",
+                  "default": 8111
+                }
+              },
+              "required": ["image", "resources", "port"]
+            },
+            "database": {
+              "type": "object",
+              "properties": {
+                "image": {
+                  "type": "object",
+                  "properties": {
+                    "repository": { "type": "string", "description": "Docker image repository for TeamCity Server" },
+                    "tag": { "type": "string", "description": "Image tag to use" },
+                    "pullPolicy": { "type": "string", "description": "Image pull policy", "enum": ["Always", "IfNotPresent", "Never"] }
+                  },
+                  "required": ["repository", "tag", "pullPolicy"]
+                },
+                "env": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "value": { "type": "string" }
+                    },
+                    "required": ["name", "value"]
+                  }
+                },
+                "resources": {
+                  "type": "object",
+                  "properties": {
+                    "requests": {
+                      "type": "object",
+                      "properties": {
+                        "memory": { "type": "string", "description": "Minimum amount of memory requested for the server container" }
+                      },
+                      "required": ["memory"]
+                    }
+                  },
+                  "required": ["requests"]
+                },
+                "volumeMounts": {
+                  "description": "Additional volume mounts for containers",
+                  "type": ["array", "null"],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "mountPath": { "type": "string" },
+                      "subPath": { "type": "string" }
+                    },
+                    "required": ["name", "mountPath"]
+                  }
+                }
+              },
+              "required": ["image", "resources"]
+            }
+          },
+          "required": ["server", "database"]
+        },
+        "volumes": {
+          "description": "Additional volumes to be mounted into the pods",
+          "type": ["array", "null"],
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "persistentVolumeClaim": {
+                "type": "object",
+                "properties": {
+                  "claimName": { "type": "string" }
+                },
+                "required": ["claimName"]
               }
             },
-            "required": ["host", "http"]
+            "required": ["name", "persistentVolumeClaim"]
+          }
+        },
+        "service": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "enum": ["ClusterIP", "NodePort", "LoadBalancer"], "description": "Kubernetes service type" },
+            "ports": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "port": { "type": "integer" },
+                  "targetPort": { "type": "integer" },
+                  "protocol": { "type": "string", "enum": ["TCP", "UDP"] }
+                },
+                "required": ["name", "port", "targetPort", "protocol"]
+              }
+            }
+          },
+          "required": ["type", "ports"]
+        },
+        "ingress": {
+          "type": ["object", "null"],
+          "properties": {
+            "annotations": {
+              "type": ["object", "null"],
+              "additionalProperties": { "type": "string" }
+            },
+            "className": { "type": "string" },
+            "tls": {
+              "type": ["array", "null"],
+              "items": {
+                "type": "object",
+                "properties": {
+                  "hosts": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "secretName": { "type": "string" }
+                },
+                "required": ["hosts", "secretName"]
+              }
+            },
+            "rules": {
+              "type": ["array", "null"],
+              "items": {
+                "type": "object",
+                "properties": {
+                  "host": { "type": "string" },
+                  "http": {
+                    "type": "object",
+                    "properties": {
+                      "paths": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": { "type": "string" },
+                            "pathType": { "type": "string" },
+                            "backend": {
+                              "type": "object",
+                              "properties": {
+                                "service": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": { "type": "string" },
+                                    "port": {
+                                      "type": "object",
+                                      "properties": {
+                                        "number": { "type": "integer" }
+                                      },
+                                      "required": ["number"]
+                                    }
+                                  },
+                                  "required": ["name", "port"]
+                                }
+                              },
+                              "required": ["service"]
+                            }
+                          },
+                          "required": ["path", "pathType", "backend"]
+                        }
+                      }
+                    },
+                    "required": ["paths"]
+                  }
+                },
+                "required": ["host", "http"]
+              }
+            }
+          },
+          "required": ["className"]
+        }
+      },
+      "required": ["replicaCount", "containers", "service"]
+    },
+    "agent": {
+      "type": "object",
+      "description": "TeamCity Agent configuration",
+      "properties": {
+        "replicaCount": {
+          "type": "integer",
+          "description": "Number of agent replicas/pods to run",
+          "default": 3,
+          "minimum": 1
+        },
+        "containers": {
+          "type": "object",
+          "properties": {
+            "agent": {
+              "type": "object",
+              "properties": {
+                "image": {
+                  "type": "object",
+                  "properties": {
+                    "repository": { "type": "string", "description": "Docker image repository for TeamCity Agent" },
+                    "tag": { "type": "string", "description": "Image tag to use" },
+                    "pullPolicy": { "type": "string", "description": "Image pull policy", "enum": ["Always", "IfNotPresent", "Never"] }
+                  },
+                  "required": ["repository", "pullPolicy"]
+                },
+                "env": {
+                  "description": "Environment variables for TeamCity Agent containers",
+                  "type": ["array", "null"],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "value": { "type": "string" }
+                    },
+                    "required": ["name", "value"]
+                  }
+                },
+                "resources": {
+                  "type": "object",
+                  "properties": {
+                    "requests": {
+                      "type": "object",
+                      "properties": {
+                        "memory": { "type": "string", "description": "Minimum amount of memory requested for each agent container" }
+                      },
+                      "required": ["memory"]
+                    }
+                  },
+                  "required": ["requests"]
+                },
+                "volumeMounts": {
+                  "description": "Additional volume mounts for TeamCity Agent containers",
+                  "type": ["array", "null"],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "mountPath": { "type": "string" }
+                    },
+                    "required": ["name", "mountPath"]
+                  }
+                }
+              },
+              "required": ["image", "resources"]
+            }
+          },
+          "required": ["agent"]
+        },
+        "volumes": {
+          "description": "Additional volumes to be mounted into the pods",
+          "type": ["array", "null"],
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "persistentVolumeClaim": {
+                "type": "object",
+                "properties": {
+                  "claimName": { "type": "string" }
+                },
+                "required": ["claimName"]
+              }
+            },
+            "required": ["name", "persistentVolumeClaim"]
           }
         }
       },
-      "required": ["className"]
+      "required": ["replicaCount", "containers"]
     }
   },
-  "required": ["teamcity"]
+  "required": ["server", "agent"]
 }

@@ -4,164 +4,174 @@ nameOverride: ""
 # Override the full name (default is the chart name + release name)
 fullnameOverride: ""
 
-# TeamCity configuration
-teamcity:
-  # TeamCity Server configuration
-  server:
-    # Number of server replicas/pods to run (should typically be 1)
-    replicaCount: 1
+# TeamCity Server configuration
+server:
 
-    image:
-      # Docker image repository for TeamCity Server
-      repository: jetbrains/teamcity-server
-      # Image tag to use (leave empty to use default from Chart or latest)
-      tag: ""
-      # Image pull policy (e.g., Always, IfNotPresent, Never)
-      pullPolicy: IfNotPresent
+  # Number of server replicas/pods to run (should typically be 1)
+  replicaCount: 1
 
-    # Environment variables for TeamCity server container
-    env:
-      - name: TEAMCITY_HTTPS_PROXY_ENABLED
-        value: "true"
+  # TeamCity Server containers configuration
+  containers:
+    server:
+      image:
+        # Docker image repository for TeamCity Server
+        repository: jetbrains/teamcity-server
+        # Image tag to use (leave empty to use default from Chart or latest)
+        tag: ""
+        # Image pull policy (e.g., Always, IfNotPresent, Never)
+        pullPolicy: IfNotPresent
 
-    resources:
-      requests:
-        # Minimum amount of memory requested for the server container
-        memory: 4Gi
+      # Environment variables for TeamCity server container
+      env:
+        - name: TEAMCITY_HTTPS_PROXY_ENABLED
+          value: "true"
 
-    # Additional volume mounts for containers
-    # Example:
-    # volumeMounts:
-    #   - name: teamcity
-    #     mountPath: /data/teamcity_server/datadir
-    #     subPath: server/data
-    #   - name: teamcity
-    #     mountPath: /opt/teamcity/logs
-    #     subPath: server/logs
-    volumeMounts: null
+      resources:
+        requests:
+          # Minimum amount of memory requested for the server container
+          memory: 4Gi
 
-    # Default port for the TeamCity HTTP service (web UI and API)
-    port: 8111
+      # Additional volume mounts for containers
+      # Example:
+      # volumeMounts:
+      #   - name: teamcity
+      #     mountPath: /data/teamcity_server/datadir
+      #     subPath: server/data
+      #   - name: teamcity
+      #     mountPath: /opt/teamcity/logs
+      #     subPath: server/logs
+      volumeMounts: null
 
-    # Configuration for the Kubernetes Service exposing TeamCity Server
-    service:
-      # Kubernetes service type (e.g., ClusterIP, NodePort, LoadBalancer)
-      type: ClusterIP
-      # List of ports to expose via the service
-      ports:
-        - name: http
-          port: 8111
-          targetPort: 8111
-          protocol: TCP
+      # Default port for the TeamCity HTTP service (web UI and API)
+      port: 8111
+    
+    database:
+      image:
+        # Docker image repository for TeamCity Server
+        repository: postgres
+        # Image tag to use (leave empty to use default from Chart or latest)
+        tag: "14"
+        # Image pull policy (e.g., Always, IfNotPresent, Never)
+        pullPolicy: IfNotPresent
 
-  # TeamCity Database configuration
-  database:
-    # Number of server replicas/pods to run (should typically be 1)
-    replicaCount: 1
+      # Environment variables for TeamCity database container
+      env:
+        - name: POSTGRES_DB
+          value: teamcity
+        - name: POSTGRES_USER
+          value: teamcity
+        - name: POSTGRES_PASSWORD
+          value: teamcity
 
-    image:
-      # Docker image repository for TeamCity Server
-      repository: postgres
-      # Image tag to use (leave empty to use default from Chart or latest)
-      tag: "14"
-      # Image pull policy (e.g., Always, IfNotPresent, Never)
-      pullPolicy: IfNotPresent
+      resources:
+        requests:
+          # Minimum amount of memory requested for the server container
+          memory: 2Gi
 
-    # Environment variables for TeamCity database container
-    env:
-      - name: POSTGRES_DB
-        value: teamcity
-      - name: POSTGRES_USER
-        value: teamcity
-      - name: POSTGRES_PASSWORD
-        value: teamcity
+      # Additional volume mounts for containers
+      # Example:
+      # volumeMounts:
+      #   - name: teamcity
+      #     mountPath: /var/lib/postgresql/data
+      #     subPath: postgresql/data
+      volumeMounts: null
 
-    resources:
-      requests:
-        # Minimum amount of memory requested for the server container
-        memory: 2Gi
-
-    # Additional volume mounts for containers
-    # Example:
-    # volumeMounts:
-    #   - name: teamcity
-    #     mountPath: /var/lib/postgresql/data
-    #     subPath: postgresql/data
-    volumeMounts: null
-
-  # TeamCity Agent configuration
-  agent:
-    # Number of agent replicas/pods to run
-    replicaCount: 3
-
-    image:
-      # Docker image repository for TeamCity Agent
-      repository: jetbrains/teamcity-agent
-      # Image tag to use (leave empty to use default from Chart or latest)
-      tag: ""
-      # Image pull policy (e.g., Always, IfNotPresent, Never)
-      pullPolicy: Always
-
-    # Environment variables for TeamCity Agent containers
-    # Example:
-    # env:
-    #   - name: AGENT_NAME
-    #     value: "custom-agent"
-    env: null
-
-    resources:
-      requests:
-        # Minimum amount of memory requested for each agent container
-        memory: 2Gi
-
-    # Additional volume mounts for TeamCity Agent containers
-    # Example:
-    # volumeMounts:
-    #   - name: urandom
-    #     mountPath: /dev/urandom
-    volumeMounts: null
-
-# Additional volumes to be mounted into the pods
-# Example:
-# volumes:
-#   - name: teamcity
-#     persistentVolumeClaim:
-#       claimName: teamcity
-volumes: null
-
-# Configuration for Ingress to expose TeamCity Server via HTTP/HTTPS
-# Note: Ingress only applies to the server component
-# If set to null, no Ingress resource will be created
-ingress:
-  # Annotations to customize the behavior of the ingress controller.
-  # Leave as null to disable.
+  # Additional volumes to be mounted into the pods
   # Example:
-  # annotations:
-  #   nginx.ingress.kubernetes.io/proxy-body-size: "100m"
-  #   nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
-  #   nginx.ingress.kubernetes.io/configuration-snippet: |
-  #     more_set_headers "X-Content-Type-Options: nosniff";
-  annotations: null
-  # Ingress class name (used to select the Ingress controller, e.g., nginx or traefik)
-  className: nginx
-  # TLS configuration for the ingress. Set to null to disable
+  # volumes:
+  #   - name: teamcity
+  #     persistentVolumeClaim:
+  #       claimName: teamcity
+  volumes: null
+
+  # Configuration for the Kubernetes Service exposing TeamCity Server
+  service:
+    # Kubernetes service type (e.g., ClusterIP, NodePort, LoadBalancer)
+    type: ClusterIP
+    # List of ports to expose via the service
+    ports:
+      - name: http
+        port: 8111
+        targetPort: 8111
+        protocol: TCP
+
+  # Configuration for Ingress to expose TeamCity Server via HTTP/HTTPS
+  # Note: Ingress only applies to the server component
+  # If set to null, no Ingress resource will be created
+  ingress:
+    # Annotations to customize the behavior of the ingress controller.
+    # Leave as null to disable.
+    # Example:
+    # annotations:
+    #   nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+    #   nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    #   nginx.ingress.kubernetes.io/configuration-snippet: |
+    #     more_set_headers "X-Content-Type-Options: nosniff";
+    annotations: null
+    # Ingress class name (used to select the Ingress controller, e.g., nginx or traefik)
+    className: nginx
+    # TLS configuration for the ingress. Set to null to disable
+    # Example:
+    # tls:
+    #   - hosts:
+    #       - teamcity.example.com
+    #     secretName: teamcity-tls
+    tls: null
+    # List of ingress rules. If null or empty, no ingress will be created
+    # Example:
+    # rules:
+    #   - host: teamcity.example.com
+    #     http:
+    #       paths:
+    #         - path: /
+    #           pathType: Prefix
+    #           backend:
+    #             service:
+    #               name: teamcity-server
+    #               port:
+    #                 number: 8111
+    rules: null
+
+# TeamCity Agent configuration
+agent:
+
+  # Number of agent replicas/pods to run
+  replicaCount: 3
+
+  # TeamCity Agent containers configuration
+  containers:
+    agent:
+      image:
+        # Docker image repository for TeamCity Agent
+        repository: jetbrains/teamcity-agent
+        # Image tag to use (leave empty to use default from Chart or latest)
+        tag: ""
+        # Image pull policy (e.g., Always, IfNotPresent, Never)
+        pullPolicy: Always
+
+      # Environment variables for TeamCity Agent containers
+      # Example:
+      # env:
+      #   - name: AGENT_NAME
+      #     value: "custom-agent"
+      env: null
+
+      resources:
+        requests:
+          # Minimum amount of memory requested for each agent container
+          memory: 2Gi
+
+      # Additional volume mounts for TeamCity Agent containers
+      # Example:
+      # volumeMounts:
+      #   - name: urandom
+      #     mountPath: /dev/urandom
+      volumeMounts: null
+
+  # Additional volumes to be mounted into the pods
   # Example:
-  # tls:
-  #   - hosts:
-  #       - teamcity.example.com
-  #     secretName: teamcity-tls
-  tls: null
-  # List of ingress rules. If null or empty, no ingress will be created
-  # Example:
-  # rules:
-  #   - host: teamcity.example.com
-  #     http:
-  #       paths:
-  #         - path: /
-  #           pathType: Prefix
-  #           backend:
-  #             service:
-  #               name: teamcity-server
-  #               port:
-  #                 number: 8111
-  rules: null
+  # volumes:
+  #   - name: teamcity
+  #     persistentVolumeClaim:
+  #       claimName: teamcity
+  volumes: null

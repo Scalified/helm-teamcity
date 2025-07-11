@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "teamcity.server.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.teamcity.server.replicaCount }}
+  replicas: {{ .Values.server.replicaCount }}
   strategy:
     type: Recreate
   selector:
@@ -17,20 +17,20 @@ spec:
         {{- include "teamcity.server.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: teamcity-server
-          image: "{{ .Values.teamcity.server.image.repository }}:{{ .Values.teamcity.server.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.teamcity.server.image.pullPolicy }}
-          {{- if .Values.teamcity.server.service }}
+        - name: server
+          image: "{{ .Values.server.containers.server.image.repository }}:{{ .Values.server.containers.server.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.server.containers.server.image.pullPolicy }}
+          {{- if .Values.server.service }}
           ports:
-            {{- range .Values.teamcity.server.service.ports }}
+            {{- range .Values.server.service.ports }}
             - containerPort: {{ .targetPort }}
               name: {{ .name }}
               protocol: {{ .protocol }}
             {{- end }}
           {{- end }}
-{{- if .Values.teamcity.server.env }}
+{{- if .Values.server.containers.server.env }}
           env:
-{{ toYaml .Values.teamcity.server.env | indent 12 }}
+{{ toYaml .Values.server.containers.server.env | indent 12 }}
 {{- end }}
           startupProbe:
             failureThreshold: 3
@@ -38,11 +38,11 @@ spec:
             periodSeconds: 15
             successThreshold: 1
             tcpSocket:
-              port: {{ .Values.teamcity.server.port }}
+              port: {{ .Values.server.containers.server.port }}
             timeoutSeconds: 2
           readinessProbe:
             tcpSocket:
-              port: {{ .Values.teamcity.server.port }}
+              port: {{ .Values.server.containers.server.port }}
             initialDelaySeconds: 10
             periodSeconds: 15
             timeoutSeconds: 2
@@ -50,24 +50,24 @@ spec:
             failureThreshold: 3
           livenessProbe:
             tcpSocket:
-              port: {{ .Values.teamcity.server.port }}
+              port: {{ .Values.server.containers.server.port }}
             initialDelaySeconds: 30
             periodSeconds: 20
             timeoutSeconds: 2
             successThreshold: 1
             failureThreshold: 5
           resources:
-{{ toYaml .Values.teamcity.server.resources | indent 12 }}
-{{- if .Values.teamcity.server.volumeMounts }}
+{{ toYaml .Values.server.containers.server.resources | indent 12 }}
+{{- if .Values.server.containers.server.volumeMounts }}
           volumeMounts:
-{{ toYaml .Values.teamcity.server.volumeMounts | indent 12 }}
+{{ toYaml .Values.server.containers.server.volumeMounts | indent 12 }}
 {{- end }}
         - name: database
-          image: "{{ .Values.teamcity.database.image.repository }}:{{ .Values.teamcity.database.image.tag }}"
-          imagePullPolicy: {{ .Values.teamcity.database.image.pullPolicy }}
-{{- if .Values.teamcity.database.env }}
+          image: "{{ .Values.server.containers.database.image.repository }}:{{ .Values.server.containers.database.image.tag }}"
+          imagePullPolicy: {{ .Values.server.containers.database.image.pullPolicy }}
+{{- if .Values.server.containers.database.env }}
           env:
-{{ toYaml .Values.teamcity.database.env | indent 12 }}
+{{ toYaml .Values.server.containers.database.env | indent 12 }}
 {{- end }}
           readinessProbe:
             exec:
@@ -96,13 +96,13 @@ spec:
             successThreshold: 1
             timeoutSeconds: 2
           resources:
-{{ toYaml .Values.teamcity.database.resources | indent 12 }}
-{{- if .Values.teamcity.database.volumeMounts }}
+{{ toYaml .Values.server.containers.database.resources | indent 12 }}
+{{- if .Values.server.containers.database.volumeMounts }}
           volumeMounts:
-{{ toYaml .Values.teamcity.database.volumeMounts | indent 12 }}
+{{ toYaml .Values.server.containers.database.volumeMounts | indent 12 }}
 {{- end }}
       restartPolicy: Always
-{{- if .Values.volumes }}
+{{- if .Values.server.volumes }}
       volumes:
-{{ toYaml .Values.volumes | indent 8 }}
+{{ toYaml .Values.server.volumes | indent 8 }}
 {{- end }}
