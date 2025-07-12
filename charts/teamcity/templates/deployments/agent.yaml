@@ -31,9 +31,10 @@ spec:
           resources:
 {{ toYaml .Values.agent.containers.agent.resources | indent 12 }}
 {{- end }}
-          volumeMounts:
-            - name: agent-config
-              mountPath: /data/teamcity_agent/conf
+{{- if .Values.agent.containers.agent.securityContext }}
+          securityContext:
+{{ toYaml .Values.agent.containers.agent.securityContext | indent 12 }}
+{{- end }}
 {{- if .Values.agent.containers.agent.volumeMounts }}
 {{ toYaml .Values.agent.containers.agent.volumeMounts | indent 12 }}
 {{- end }}

@@ -159,13 +159,16 @@ agent:
         requests:
           # Minimum amount of memory requested for each agent container
           memory: 2Gi
+      
+      securityContext:
+        # User ID to run the agent container process as (set to 0 for root)
+        runAsUser: 0
 
       # Additional volume mounts for TeamCity Agent containers
       # Example:
-      # volumeMounts:
-      #   - name: urandom
-      #     mountPath: /dev/urandom
-      volumeMounts: null
+      volumeMounts:
+        - name: teamcity-agent
+          mountPath: /data/teamcity_agent/conf
 
   # Hostname used for the TeamCity Agent pod/container
   hostname: teamcity-agent
@@ -173,9 +176,6 @@ agent:
   # Additional volumes to be mounted into the pods
   # Example:
   # volumes:
-  #   - name: teamcity
-  #     persistentVolumeClaim:
-  #       claimName: teamcity
   #   - name: urandom
   #     path: /dev/urandom
   volumes: null
@@ -183,7 +183,7 @@ agent:
   # Persistent volume claim templates for TeamCity Agent pods
   volumeClaimTemplates:
     - metadata:
-        name: agent-config
+        name: teamcity-agent
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:
