@@ -184,8 +184,6 @@ agent:
   volumeClaimTemplates:
     - metadata:
         name: agent-config
-        annotations:
-          longhorn.io/auto-created-for-pvc: "true"
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:
