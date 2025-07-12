@@ -353,6 +353,17 @@
                     }
                   }
                 },
+                "securityContext": {
+                  "type": "object",
+                  "description": "Security context for TeamCity Agent container",
+                  "properties": {
+                    "runAsUser": {
+                      "type": "integer",
+                      "description": "User ID to run the agent container process as (set to 0 for root)"
+                    }
+                  },
+                  "required": ["runAsUser"]
+                },
                 "volumeMounts": {
                   "description": "Additional volume mounts for TeamCity Agent containers",
                   "type": ["array", "null"],

@@ -56,8 +56,14 @@ spec:
             timeoutSeconds: 2
             successThreshold: 1
             failureThreshold: 5
+{{- if .Values.server.containers.server.resources }}
           resources:
 {{ toYaml .Values.server.containers.server.resources | indent 12 }}
+{{- end }}
+{{- if .Values.server.containers.server.securityContext }}
+          securityContext:
+{{ toYaml .Values.agent.containers.server.securityContext | indent 12 }}
+{{- end }}
 {{- if .Values.server.containers.server.volumeMounts }}
           volumeMounts:
 {{ toYaml .Values.server.containers.server.volumeMounts | indent 12 }}
