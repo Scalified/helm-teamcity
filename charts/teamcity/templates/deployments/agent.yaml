@@ -5,7 +5,9 @@ metadata:
   labels:
     {{- include "teamcity.agent.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.agent.replicaCount }}
+  ordinals:
+    start: {{ .Values.agent.ordinals.start | default 0 }}
+  replicas: {{ .Values.agent.replicaCount | default 1 }}
   serviceName: {{ include "teamcity.agent.fullname" . }}
   selector:
     matchLabels:
@@ -18,7 +20,7 @@ spec:
       containers:
         - name: teamcity-agent
           image: "{{ .Values.agent.containers.agent.image.repository }}:{{ .Values.agent.containers.agent.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.agent.containers.agent.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.agent.containers.agent.image.pullPolicy | default "IfNotPresent" }}
           env:
             - name: AGENT_NAME
               valueFrom:

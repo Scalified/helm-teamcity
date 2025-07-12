@@ -136,6 +136,10 @@ server:
 
 # TeamCity Agent configuration
 agent:
+  # Ordinals configuration for StatefulSet (starting ordinal index)
+  ordinals:
+    start: 1
+
   # Number of agent replicas/pods to run
   replicaCount: 3
 
@@ -159,7 +163,7 @@ agent:
         requests:
           # Minimum amount of memory requested for each agent container
           memory: 2Gi
-      
+
       securityContext:
         # User ID to run the agent container process as (set to 0 for root)
         runAsUser: 0

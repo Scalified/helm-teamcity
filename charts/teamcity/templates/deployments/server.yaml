@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "teamcity.server.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.server.replicaCount }}
+  replicas: {{ .Values.server.replicaCount | default 1 }}
   strategy:
     type: Recreate
   selector:
@@ -19,7 +19,7 @@ spec:
       containers:
         - name: server
           image: "{{ .Values.server.containers.server.image.repository }}:{{ .Values.server.containers.server.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.server.containers.server.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.server.containers.server.image.pullPolicy | default "IfNotPresent" }}
           {{- if .Values.server.service }}
           ports:
             {{- range .Values.server.service.ports }}
@@ -42,7 +42,7 @@ spec:
             timeoutSeconds: 2
           readinessProbe:
             tcpSocket:
-              port: {{ .Values.server.containers.server.port }}
+              port: {{ .Values.server.containers.server.port | default 8111 }}
             initialDelaySeconds: 10
             periodSeconds: 15
             timeoutSeconds: 2
@@ -50,7 +50,7 @@ spec:
             failureThreshold: 3
           livenessProbe:
             tcpSocket:
-              port: {{ .Values.server.containers.server.port }}
+              port: {{ .Values.server.containers.server.port | default 8111 }}
             initialDelaySeconds: 30
             periodSeconds: 20
             timeoutSeconds: 2
@@ -70,7 +70,7 @@ spec:
 {{- end }}
         - name: database
           image: "{{ .Values.server.containers.database.image.repository }}:{{ .Values.server.containers.database.image.tag }}"
-          imagePullPolicy: {{ .Values.server.containers.database.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.server.containers.database.image.pullPolicy | default "IfNotPresent" }}
 {{- if .Values.server.containers.database.env }}
           env:
 {{ toYaml .Values.server.containers.database.env | indent 12 }}
