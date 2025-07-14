@@ -6,7 +6,7 @@ metadata:
     {{- include "teamcity.agent.labels" . | nindent 4 }}
 spec:
   ordinals:
-    start: {{ .Values.agent.ordinals.start | default 0 }}
+    start: {{ .Values.agent.ordinals.start | default 1 }}
   replicas: {{ .Values.agent.replicaCount | default 1 }}
   serviceName: {{ include "teamcity.agent.fullname" . }}
   selector:

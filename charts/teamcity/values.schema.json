@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema#",
   "title": "TeamCity Helm Chart Values Schema",
-  "description": "Schema for validating values.yaml for TeamCity Helm chart.",
+  "description": "Schema for values.yaml for TeamCity Helm Chart.",
   "type": "object",
   "properties": {
     "nameOverride": {
@@ -46,8 +46,8 @@
                     "pullPolicy": {
                       "type": "string",
                       "description": "Image pull policy (e.g., Always, IfNotPresent, Never)",
-                      "enum": ["Always", "IfNotPresent", "Never"],
-                      "default": "IfNotPresent"
+                      "default": "IfNotPresent",
+                      "enum": ["Always", "IfNotPresent", "Never"]
                     }
                   },
                   "required": ["repository", "pullPolicy"]
@@ -73,7 +73,7 @@
                         "memory": {
                           "type": "string",
                           "description": "Minimum amount of memory requested for the server container",
-                          "pattern": "^[0-9]+(Mi|Gi)$"
+                          "default": "4Gi"
                         }
                       },
                       "required": ["memory"]
@@ -81,8 +81,8 @@
                   }
                 },
                 "volumeMounts": {
-                  "description": "Additional volume mounts for containers",
                   "type": ["array", "null"],
+                  "description": "Additional volume mounts for TeamCity server container",
                   "items": {
                     "type": "object",
                     "properties": {
@@ -99,7 +99,7 @@
                   "default": 8111
                 }
               },
-              "required": ["image", "resources", "port"]
+              "required": ["image", "port"]
             },
             "database": {
               "type": "object",
@@ -109,7 +109,7 @@
                   "properties": {
                     "repository": {
                       "type": "string",
-                      "description": "Docker image repository for TeamCity Server",
+                      "description": "Docker image repository for TeamCity database",
                       "default": "postgres"
                     },
                     "tag": {
@@ -120,8 +120,8 @@
                     "pullPolicy": {
                       "type": "string",
                       "description": "Image pull policy (e.g., Always, IfNotPresent, Never)",
-                      "enum": ["Always", "IfNotPresent", "Never"],
-                      "default": "IfNotPresent"
+                      "default": "IfNotPresent",
+                      "enum": ["Always", "IfNotPresent", "Never"]
                     }
                   },
                   "required": ["repository", "tag", "pullPolicy"]
@@ -146,8 +146,8 @@
                       "properties": {
                         "memory": {
                           "type": "string",
-                          "description": "Minimum amount of memory requested for the server container",
-                          "pattern": "^[0-9]+(Mi|Gi)$"
+                          "description": "Minimum amount of memory requested for the TeamCity database container",
+                          "default": "2Gi"
                         }
                       },
                       "required": ["memory"]
@@ -155,8 +155,8 @@
                   }
                 },
                 "volumeMounts": {
-                  "description": "Additional volume mounts for containers",
                   "type": ["array", "null"],
+                  "description": "Additional volume mounts for TeamCity database container",
                   "items": {
                     "type": "object",
                     "properties": {
@@ -168,10 +168,9 @@
                   }
                 }
               },
-              "required": ["image", "resources"]
+              "required": ["image"]
             }
-          },
-          "required": ["server", "database"]
+          }
         },
         "hostname": {
           "type": "string",
@@ -179,23 +178,35 @@
           "default": "teamcity-server"
         },
         "volumes": {
-          "description": "Additional volumes to be mounted into the pods",
           "type": ["array", "null"],
+          "description": "Additional volumes to be mounted into the TeamCity Server pods",
           "items": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "persistentVolumeClaim": {
+                "type": "object",
+                "properties": {
+                  "claimName": { "type": "string" }
+                },
+                "required": ["claimName"]
+              }
+            },
+            "required": ["name", "persistentVolumeClaim"]
           }
         },
         "service": {
-          "type": ["object", "null"],
-          "description": "Configuration for the Kubernetes Service exposing TeamCity Server",
+          "type": "object",
           "properties": {
             "type": {
               "type": "string",
-              "enum": ["ClusterIP", "NodePort", "LoadBalancer"],
-              "default": "ClusterIP"
+              "description": "Kubernetes service type (e.g., ClusterIP, NodePort, LoadBalancer)",
+              "default": "ClusterIP",
+              "enum": ["ClusterIP", "NodePort", "LoadBalancer"]
             },
             "ports": {
               "type": "array",
+              "description": "List of ports to expose via the service",
               "items": {
                 "type": "object",
                 "properties": {
@@ -215,14 +226,17 @@
           "properties": {
             "annotations": {
               "type": ["object", "null"],
+              "description": "Annotations to customize the behavior of the ingress controller",
               "additionalProperties": { "type": "string" }
             },
             "className": {
               "type": "string",
+              "description": "Ingress class name (used to select the Ingress controller, e.g., nginx or traefik)",
               "default": "nginx"
             },
             "tls": {
               "type": ["array", "null"],
+              "description": "TLS configuration for the ingress",
               "items": {
                 "type": "object",
                 "properties": {
@@ -237,6 +251,7 @@
             },
             "rules": {
               "type": ["array", "null"],
+              "description": "List of ingress rules",
               "items": {
                 "type": "object",
                 "properties": {
@@ -284,13 +299,22 @@
             }
           }
         }
-      },
-      "required": ["replicaCount", "containers", "hostname", "service"]
+      }
     },
     "agent": {
       "type": "object",
       "description": "TeamCity Agent configuration",
       "properties": {
+        "ordinals": {
+          "type": "object",
+          "properties": {
+            "start": {
+              "type": "integer",
+              "description": "Ordinals configuration for the StatefulSet (starting ordinal index)",
+              "default": 1
+            }
+          }
+        },
         "replicaCount": {
           "type": "integer",
           "description": "Number of agent replicas/pods to run",
@@ -319,15 +343,15 @@
                     "pullPolicy": {
                       "type": "string",
                       "description": "Image pull policy (e.g., Always, IfNotPresent, Never)",
-                      "enum": ["Always", "IfNotPresent", "Never"],
-                      "default": "Always"
+                      "default": "Always",
+                      "enum": ["Always", "IfNotPresent", "Never"]
                     }
                   },
                   "required": ["repository", "pullPolicy"]
                 },
                 "env": {
                   "type": "array",
-                  "description": "Environment variables for TeamCity Agent containers",
+                  "description": "Environment variables for TeamCity agent container",
                   "items": {
                     "type": "object",
                     "properties": {
@@ -346,7 +370,7 @@
                         "memory": {
                           "type": "string",
                           "description": "Minimum amount of memory requested for each agent container",
-                          "pattern": "^[0-9]+(Mi|Gi)$"
+                          "default": "2Gi"
                         }
                       },
                       "required": ["memory"]
@@ -355,18 +379,17 @@
                 },
                 "securityContext": {
                   "type": "object",
-                  "description": "Security context for TeamCity Agent container",
                   "properties": {
                     "runAsUser": {
                       "type": "integer",
-                      "description": "User ID to run the agent container process as (set to 0 for root)"
+                      "description": "User ID to run the agent container process as (set to 0 for root)",
+                      "default": 0
                     }
-                  },
-                  "required": ["runAsUser"]
+                  }
                 },
                 "volumeMounts": {
-                  "description": "Additional volume mounts for TeamCity Agent containers",
-                  "type": ["array", "null"],
+                  "type": "array",
+                  "description": "Additional volume mounts for TeamCity agent containers",
                   "items": {
                     "type": "object",
                     "properties": {
@@ -377,22 +400,29 @@
                   }
                 }
               },
-              "required": ["image", "resources"]
+              "required": ["image"]
             }
-          },
-          "required": ["agent"]
+          }
         },
         "hostname": {
           "type": "string",
-          "description": "Hostname used for the TeamCity Agent pod/container",
+          "description": "Hostname used for the TeamCity agent pod/container",
           "default": "teamcity-agent"
         },
         "volumes": {
-          "description": "Additional volumes to be mounted into the pods",
-          "type": ["array", "null"]
+          "type": ["array", "null"],
+          "description": "Additional volumes to be mounted into the TeamCity Agent pods",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "path": { "type": "string" }
+            },
+            "required": ["name", "path"]
+          }
         },
         "volumeClaimTemplates": {
-          "type": ["array", "null"],
+          "type": "array",
           "description": "Persistent volume claim templates for TeamCity Agent pods",
           "items": {
             "type": "object",
@@ -400,11 +430,7 @@
               "metadata": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string" },
-                  "annotations": {
-                    "type": "object",
-                    "additionalProperties": { "type": "string" }
-                  }
+                  "name": { "type": "string" }
                 },
                 "required": ["name"]
               },
@@ -424,7 +450,7 @@
                           "storage": {
                             "type": "string",
                             "description": "Storage size requested for each agent's persistent volume",
-                            "pattern": "^[0-9]+(Mi|Gi)$"
+                            "default": "1Gi"
                           }
                         },
                         "required": ["storage"]
@@ -443,9 +469,8 @@
             "required": ["metadata", "spec"]
           }
         }
-      },
-      "required": ["replicaCount", "containers", "hostname"]
+      }
     }
   },
-  "required": ["server", "agent"]
+  "additionalProperties": false
 }

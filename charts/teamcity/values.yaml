@@ -11,6 +11,7 @@ server:
 
   # TeamCity Server containers configuration
   containers:
+    # TeamCity server container configuration
     server:
       image:
         # Docker image repository for TeamCity Server
@@ -30,7 +31,7 @@ server:
           # Minimum amount of memory requested for the server container
           memory: 4Gi
 
-      # Additional volume mounts for containers
+      # Additional volume mounts for TeamCity server container
       # Example:
       # volumeMounts:
       #   - name: teamcity
@@ -44,9 +45,10 @@ server:
       # Default port for the TeamCity Server HTTP service (web UI and API)
       port: 8111
 
+    # TeamCity database container configuration
     database:
       image:
-        # Docker image repository for TeamCity Server
+        # Docker image repository for TeamCity database
         repository: postgres
         # Image tag to use (leave empty to use default from Chart or latest)
         tag: "14"
@@ -64,10 +66,10 @@ server:
 
       resources:
         requests:
-          # Minimum amount of memory requested for the server container
+          # Minimum amount of memory requested for the TeamCity database container
           memory: 2Gi
 
-      # Additional volume mounts for containers
+      # Additional volume mounts for TeamCity database container
       # Example:
       # volumeMounts:
       #   - name: teamcity
@@ -78,7 +80,7 @@ server:
   # Hostname used for the TeamCity Server pod/container
   hostname: teamcity-server
 
-  # Additional volumes to be mounted into the pods
+  # Additional volumes to be mounted into the TeamCity Server pods
   # Example:
   # volumes:
   #   - name: teamcity
@@ -136,7 +138,7 @@ server:
 
 # TeamCity Agent configuration
 agent:
-  # Ordinals configuration for StatefulSet (starting ordinal index)
+  # Ordinals configuration for the StatefulSet (starting ordinal index)
   ordinals:
     start: 1
 
@@ -145,6 +147,7 @@ agent:
 
   # TeamCity Agent containers configuration
   containers:
+    # TeamCity Agent container configuration
     agent:
       image:
         # Docker image repository for TeamCity Agent
@@ -154,7 +157,7 @@ agent:
         # Image pull policy (e.g., Always, IfNotPresent, Never)
         pullPolicy: Always
 
-      # Environment variables for TeamCity Agent containers
+      # Environment variables for TeamCity agent container
       env:
         - name: SERVER_URL
           value: "http://teamcity-server:8111"
@@ -168,15 +171,15 @@ agent:
         # User ID to run the agent container process as (set to 0 for root)
         runAsUser: 0
 
-      # Additional volume mounts for TeamCity Agent containers
+      # Additional volume mounts for TeamCity agent containers
       volumeMounts:
         - name: teamcity-agent
           mountPath: /data/teamcity_agent/conf
 
-  # Hostname used for the TeamCity Agent pod/container
+  # Hostname used for the TeamCity agent pod/container
   hostname: teamcity-agent
 
-  # Additional volumes to be mounted into the pods
+  # Additional volumes to be mounted into the TeamCity Agent pods
   # Example:
   # volumes:
   #   - name: urandom
@@ -186,8 +189,10 @@ agent:
   # Persistent volume claim templates for TeamCity Agent pods
   volumeClaimTemplates:
     - metadata:
+        # Name of the persistent volume claim for the agent
         name: teamcity-agent
       spec:
+        # Defines how the volume can be accessed by pods (e.g., ReadWriteOnce)
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
