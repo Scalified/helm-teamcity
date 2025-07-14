@@ -50,7 +50,8 @@
                       "enum": ["Always", "IfNotPresent", "Never"]
                     }
                   },
-                  "required": ["repository", "pullPolicy"]
+                  "required": ["repository", "pullPolicy"],
+                  "additionalProperties": true
                 },
                 "env": {
                   "type": "array",
@@ -61,7 +62,8 @@
                       "name": { "type": "string" },
                       "value": { "type": "string" }
                     },
-                    "required": ["name", "value"]
+                    "required": ["name", "value"],
+                    "additionalProperties": true
                   }
                 },
                 "resources": {
@@ -76,9 +78,11 @@
                           "default": "4Gi"
                         }
                       },
-                      "required": ["memory"]
+                      "required": ["memory"],
+                      "additionalProperties": true
                     }
-                  }
+                  },
+                  "additionalProperties": true
                 },
                 "volumeMounts": {
                   "type": ["array", "null"],
@@ -90,7 +94,8 @@
                       "mountPath": { "type": "string" },
                       "subPath": { "type": "string" }
                     },
-                    "required": ["name", "mountPath"]
+                    "required": ["name", "mountPath"],
+                    "additionalProperties": true
                   }
                 },
                 "port": {
@@ -124,7 +129,8 @@
                       "enum": ["Always", "IfNotPresent", "Never"]
                     }
                   },
-                  "required": ["repository", "tag", "pullPolicy"]
+                  "required": ["repository", "tag", "pullPolicy"],
+                  "additionalProperties": true
                 },
                 "env": {
                   "type": "array",
@@ -135,7 +141,8 @@
                       "name": { "type": "string" },
                       "value": { "type": "string" }
                     },
-                    "required": ["name", "value"]
+                    "required": ["name", "value"],
+                    "additionalProperties": true
                   }
                 },
                 "resources": {
@@ -150,9 +157,11 @@
                           "default": "2Gi"
                         }
                       },
-                      "required": ["memory"]
+                      "required": ["memory"],
+                      "additionalProperties": true
                     }
-                  }
+                  },
+                  "additionalProperties": true
                 },
                 "volumeMounts": {
                   "type": ["array", "null"],
@@ -164,7 +173,8 @@
                       "mountPath": { "type": "string" },
                       "subPath": { "type": "string" }
                     },
-                    "required": ["name", "mountPath"]
+                    "required": ["name", "mountPath"],
+                    "additionalProperties": true
                   }
                 }
               },
@@ -215,10 +225,12 @@
                   "targetPort": { "type": "integer" },
                   "protocol": { "type": "string", "enum": ["TCP", "UDP"] }
                 },
-                "required": ["name", "port", "targetPort", "protocol"]
+                "required": ["name", "port", "targetPort", "protocol"],
+                "additionalProperties": true
               }
             }
-          }
+          },
+          "additionalProperties": true
         },
         "ingress": {
           "type": ["object", "null"],
@@ -246,7 +258,8 @@
                   },
                   "secretName": { "type": "string" }
                 },
-                "required": ["hosts", "secretName"]
+                "required": ["hosts", "secretName"],
+                "additionalProperties": true
               }
             },
             "rules": {
@@ -278,26 +291,33 @@
                                       "properties": {
                                         "number": { "type": "integer" }
                                       },
-                                      "required": ["number"]
+                                      "required": ["number"],
+                                      "additionalProperties": true
                                     }
                                   },
-                                  "required": ["name", "port"]
+                                  "required": ["name", "port"],
+                                  "additionalProperties": true
                                 }
                               },
-                              "required": ["service"]
+                              "required": ["service"],
+                              "additionalProperties": true
                             }
                           },
-                          "required": ["path", "pathType", "backend"]
+                          "required": ["path", "pathType", "backend"],
+                          "additionalProperties": true
                         }
                       }
                     },
-                    "required": ["paths"]
+                    "required": ["paths"],
+                    "additionalProperties": true
                   }
                 },
-                "required": ["host", "http"]
+                "required": ["host", "http"],
+                "additionalProperties": true
               }
             }
-          }
+          },
+          "additionalProperties": true
         }
       }
     },
@@ -347,7 +367,8 @@
                       "enum": ["Always", "IfNotPresent", "Never"]
                     }
                   },
-                  "required": ["repository", "pullPolicy"]
+                  "required": ["repository", "pullPolicy"],
+                  "additionalProperties": true
                 },
                 "env": {
                   "type": "array",
@@ -358,7 +379,8 @@
                       "name": { "type": "string" },
                       "value": { "type": "string" }
                     },
-                    "required": ["name", "value"]
+                    "required": ["name", "value"],
+                    "additionalProperties": true
                   }
                 },
                 "resources": {
@@ -373,9 +395,11 @@
                           "default": "2Gi"
                         }
                       },
-                      "required": ["memory"]
+                      "required": ["memory"],
+                      "additionalProperties": true
                     }
-                  }
+                  },
+                  "additionalProperties": true
                 },
                 "securityContext": {
                   "type": "object",
@@ -385,7 +409,8 @@
                       "description": "User ID to run the agent container process as (set to 0 for root)",
                       "default": 0
                     }
-                  }
+                  },
+                  "additionalProperties": true
                 },
                 "volumeMounts": {
                   "type": "array",
@@ -396,11 +421,13 @@
                       "name": { "type": "string" },
                       "mountPath": { "type": "string" }
                     },
-                    "required": ["name", "mountPath"]
+                    "required": ["name", "mountPath"],
+                    "additionalProperties": true
                   }
                 }
               },
-              "required": ["image"]
+              "required": ["image"],
+              "additionalProperties": true
             }
           }
         },
@@ -415,10 +442,10 @@
           "items": {
             "type": "object",
             "properties": {
-              "name": { "type": "string" },
-              "path": { "type": "string" }
+              "name": { "type": "string" }
             },
-            "required": ["name", "path"]
+            "required": ["name"],
+            "additionalProperties": true
           }
         },
         "volumeClaimTemplates": {

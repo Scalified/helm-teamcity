@@ -89,6 +89,7 @@ server:
   volumes: null
 
   # Configuration for the Kubernetes Service exposing TeamCity Server
+  # If set to null, no Service resource will be created
   service:
     # Kubernetes service type (e.g., ClusterIP, NodePort, LoadBalancer)
     type: ClusterIP
