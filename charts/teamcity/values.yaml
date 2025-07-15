@@ -94,6 +94,7 @@ server:
     # Kubernetes service type (e.g., ClusterIP, NodePort, LoadBalancer)
     type: ClusterIP
     # List of ports to expose via the service
+    # Each entry defines a port name, external service port, internal container target port, and protocol
     ports:
       - name: http
         port: 8111

@@ -47,10 +47,17 @@
                       "type": "string",
                       "description": "Image pull policy (e.g., Always, IfNotPresent, Never)",
                       "default": "IfNotPresent",
-                      "enum": ["Always", "IfNotPresent", "Never"]
+                      "enum": [
+                        "Always",
+                        "IfNotPresent",
+                        "Never"
+                      ]
                     }
                   },
-                  "required": ["repository", "pullPolicy"],
+                  "required": [
+                    "repository",
+                    "pullPolicy"
+                  ],
                   "additionalProperties": true
                 },
                 "env": {
@@ -59,10 +66,17 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "name": { "type": "string" },
-                      "value": { "type": "string" }
+                      "name": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
                     },
-                    "required": ["name", "value"],
+                    "required": [
+                      "name",
+                      "value"
+                    ],
                     "additionalProperties": true
                   }
                 },
@@ -78,23 +92,37 @@
                           "default": "4Gi"
                         }
                       },
-                      "required": ["memory"],
+                      "required": [
+                        "memory"
+                      ],
                       "additionalProperties": true
                     }
                   },
                   "additionalProperties": true
                 },
                 "volumeMounts": {
-                  "type": ["array", "null"],
+                  "type": [
+                    "array",
+                    "null"
+                  ],
                   "description": "Additional volume mounts for TeamCity server container",
                   "items": {
                     "type": "object",
                     "properties": {
-                      "name": { "type": "string" },
-                      "mountPath": { "type": "string" },
-                      "subPath": { "type": "string" }
+                      "name": {
+                        "type": "string"
+                      },
+                      "mountPath": {
+                        "type": "string"
+                      },
+                      "subPath": {
+                        "type": "string"
+                      }
                     },
-                    "required": ["name", "mountPath"],
+                    "required": [
+                      "name",
+                      "mountPath"
+                    ],
                     "additionalProperties": true
                   }
                 },
@@ -104,7 +132,10 @@
                   "default": 8111
                 }
               },
-              "required": ["image", "port"]
+              "required": [
+                "image",
+                "port"
+              ]
             },
             "database": {
               "type": "object",
@@ -126,10 +157,18 @@
                       "type": "string",
                       "description": "Image pull policy (e.g., Always, IfNotPresent, Never)",
                       "default": "IfNotPresent",
-                      "enum": ["Always", "IfNotPresent", "Never"]
+                      "enum": [
+                        "Always",
+                        "IfNotPresent",
+                        "Never"
+                      ]
                     }
                   },
-                  "required": ["repository", "tag", "pullPolicy"],
+                  "required": [
+                    "repository",
+                    "tag",
+                    "pullPolicy"
+                  ],
                   "additionalProperties": true
                 },
                 "env": {
@@ -138,10 +177,17 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "name": { "type": "string" },
-                      "value": { "type": "string" }
+                      "name": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
                     },
-                    "required": ["name", "value"],
+                    "required": [
+                      "name",
+                      "value"
+                    ],
                     "additionalProperties": true
                   }
                 },
@@ -157,28 +203,44 @@
                           "default": "2Gi"
                         }
                       },
-                      "required": ["memory"],
+                      "required": [
+                        "memory"
+                      ],
                       "additionalProperties": true
                     }
                   },
                   "additionalProperties": true
                 },
                 "volumeMounts": {
-                  "type": ["array", "null"],
+                  "type": [
+                    "array",
+                    "null"
+                  ],
                   "description": "Additional volume mounts for TeamCity database container",
                   "items": {
                     "type": "object",
                     "properties": {
-                      "name": { "type": "string" },
-                      "mountPath": { "type": "string" },
-                      "subPath": { "type": "string" }
+                      "name": {
+                        "type": "string"
+                      },
+                      "mountPath": {
+                        "type": "string"
+                      },
+                      "subPath": {
+                        "type": "string"
+                      }
                     },
-                    "required": ["name", "mountPath"],
+                    "required": [
+                      "name",
+                      "mountPath"
+                    ],
                     "additionalProperties": true
                   }
                 }
               },
-              "required": ["image"]
+              "required": [
+                "image"
+              ]
             }
           }
         },
@@ -188,31 +250,51 @@
           "default": "teamcity-server"
         },
         "volumes": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "description": "Additional volumes to be mounted into the TeamCity Server pods",
           "items": {
             "type": "object",
             "properties": {
-              "name": { "type": "string" },
+              "name": {
+                "type": "string"
+              },
               "persistentVolumeClaim": {
                 "type": "object",
                 "properties": {
-                  "claimName": { "type": "string" }
+                  "claimName": {
+                    "type": "string"
+                  }
                 },
-                "required": ["claimName"]
+                "required": [
+                  "claimName"
+                ]
               }
             },
-            "required": ["name", "persistentVolumeClaim"]
+            "required": [
+              "name",
+              "persistentVolumeClaim"
+            ]
           }
         },
         "service": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Configuration for the Kubernetes Service exposing TeamCity Server. If set to null, no Service resource will be created",
           "properties": {
             "type": {
               "type": "string",
               "description": "Kubernetes service type (e.g., ClusterIP, NodePort, LoadBalancer)",
               "default": "ClusterIP",
-              "enum": ["ClusterIP", "NodePort", "LoadBalancer"]
+              "enum": [
+                "ClusterIP",
+                "NodePort",
+                "LoadBalancer"
+              ]
             },
             "ports": {
               "type": "array",
@@ -220,12 +302,29 @@
               "items": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string" },
-                  "port": { "type": "integer" },
-                  "targetPort": { "type": "integer" },
-                  "protocol": { "type": "string", "enum": ["TCP", "UDP"] }
+                  "name": {
+                    "type": "string"
+                  },
+                  "port": {
+                    "type": "integer"
+                  },
+                  "targetPort": {
+                    "type": "integer"
+                  },
+                  "protocol": {
+                    "type": "string",
+                    "enum": [
+                      "TCP",
+                      "UDP"
+                    ]
+                  }
                 },
-                "required": ["name", "port", "targetPort", "protocol"],
+                "required": [
+                  "name",
+                  "port",
+                  "targetPort",
+                  "protocol"
+                ],
                 "additionalProperties": true
               }
             }
@@ -233,13 +332,21 @@
           "additionalProperties": true
         },
         "ingress": {
-          "type": ["object", "null"],
-          "description": "Configuration for Ingress to expose TeamCity Server via HTTP/HTTPS",
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Configuration for Ingress to expose TeamCity Server via HTTP/HTTPS. If set to null, no Ingress resource will be created",
           "properties": {
             "annotations": {
-              "type": ["object", "null"],
+              "type": [
+                "object",
+                "null"
+              ],
               "description": "Annotations to customize the behavior of the ingress controller",
-              "additionalProperties": { "type": "string" }
+              "additionalProperties": {
+                "type": "string"
+              }
             },
             "className": {
               "type": "string",
@@ -247,28 +354,43 @@
               "default": "nginx"
             },
             "tls": {
-              "type": ["array", "null"],
+              "type": [
+                "array",
+                "null"
+              ],
               "description": "TLS configuration for the ingress",
               "items": {
                 "type": "object",
                 "properties": {
                   "hosts": {
                     "type": "array",
-                    "items": { "type": "string" }
+                    "items": {
+                      "type": "string"
+                    }
                   },
-                  "secretName": { "type": "string" }
+                  "secretName": {
+                    "type": "string"
+                  }
                 },
-                "required": ["hosts", "secretName"],
+                "required": [
+                  "hosts",
+                  "secretName"
+                ],
                 "additionalProperties": true
               }
             },
             "rules": {
-              "type": ["array", "null"],
+              "type": [
+                "array",
+                "null"
+              ],
               "description": "List of ingress rules",
               "items": {
                 "type": "object",
                 "properties": {
-                  "host": { "type": "string" },
+                  "host": {
+                    "type": "string"
+                  },
                   "http": {
                     "type": "object",
                     "properties": {
@@ -277,46 +399,73 @@
                         "items": {
                           "type": "object",
                           "properties": {
-                            "path": { "type": "string" },
-                            "pathType": { "type": "string" },
+                            "path": {
+                              "type": "string"
+                            },
+                            "pathType": {
+                              "type": "string"
+                            },
                             "backend": {
                               "type": "object",
                               "properties": {
                                 "service": {
                                   "type": "object",
                                   "properties": {
-                                    "name": { "type": "string" },
+                                    "name": {
+                                      "type": "string"
+                                    },
                                     "port": {
                                       "type": "object",
                                       "properties": {
-                                        "number": { "type": "integer" }
+                                        "number": {
+                                          "type": "integer"
+                                        }
                                       },
-                                      "required": ["number"],
+                                      "required": [
+                                        "number"
+                                      ],
                                       "additionalProperties": true
                                     }
                                   },
-                                  "required": ["name", "port"],
+                                  "required": [
+                                    "name",
+                                    "port"
+                                  ],
                                   "additionalProperties": true
                                 }
                               },
-                              "required": ["service"],
+                              "required": [
+                                "service"
+                              ],
                               "additionalProperties": true
                             }
                           },
-                          "required": ["path", "pathType", "backend"],
+                          "required": [
+                            "path",
+                            "pathType",
+                            "backend"
+                          ],
                           "additionalProperties": true
                         }
                       }
                     },
-                    "required": ["paths"],
+                    "required": [
+                      "paths"
+                    ],
                     "additionalProperties": true
                   }
                 },
-                "required": ["host", "http"],
+                "required": [
+                  "host",
+                  "http"
+                ],
                 "additionalProperties": true
               }
             }
           },
+          "required": [
+            "className"
+          ],
           "additionalProperties": true
         }
       }
@@ -364,10 +513,17 @@
                       "type": "string",
                       "description": "Image pull policy (e.g., Always, IfNotPresent, Never)",
                       "default": "Always",
-                      "enum": ["Always", "IfNotPresent", "Never"]
+                      "enum": [
+                        "Always",
+                        "IfNotPresent",
+                        "Never"
+                      ]
                     }
                   },
-                  "required": ["repository", "pullPolicy"],
+                  "required": [
+                    "repository",
+                    "pullPolicy"
+                  ],
                   "additionalProperties": true
                 },
                 "env": {
@@ -376,10 +532,17 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "name": { "type": "string" },
-                      "value": { "type": "string" }
+                      "name": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
                     },
-                    "required": ["name", "value"],
+                    "required": [
+                      "name",
+                      "value"
+                    ],
                     "additionalProperties": true
                   }
                 },
@@ -395,7 +558,9 @@
                           "default": "2Gi"
                         }
                       },
-                      "required": ["memory"],
+                      "required": [
+                        "memory"
+                      ],
                       "additionalProperties": true
                     }
                   },
@@ -418,15 +583,24 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "name": { "type": "string" },
-                      "mountPath": { "type": "string" }
+                      "name": {
+                        "type": "string"
+                      },
+                      "mountPath": {
+                        "type": "string"
+                      }
                     },
-                    "required": ["name", "mountPath"],
+                    "required": [
+                      "name",
+                      "mountPath"
+                    ],
                     "additionalProperties": true
                   }
                 }
               },
-              "required": ["image"],
+              "required": [
+                "image"
+              ],
               "additionalProperties": true
             }
           }
@@ -437,14 +611,21 @@
           "default": "teamcity-agent"
         },
         "volumes": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "description": "Additional volumes to be mounted into the TeamCity Agent pods",
           "items": {
             "type": "object",
             "properties": {
-              "name": { "type": "string" }
+              "name": {
+                "type": "string"
+              }
             },
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "additionalProperties": true
           }
         },
@@ -457,16 +638,22 @@
               "metadata": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string" }
+                  "name": {
+                    "type": "string"
+                  }
                 },
-                "required": ["name"]
+                "required": [
+                  "name"
+                ]
               },
               "spec": {
                 "type": "object",
                 "properties": {
                   "accessModes": {
                     "type": "array",
-                    "items": { "type": "string" }
+                    "items": {
+                      "type": "string"
+                    }
                   },
                   "resources": {
                     "type": "object",
@@ -480,7 +667,9 @@
                             "default": "1Gi"
                           }
                         },
-                        "required": ["storage"]
+                        "required": [
+                          "storage"
+                        ]
                       }
                     }
                   },
@@ -490,10 +679,17 @@
                     "default": "standard"
                   }
                 },
-                "required": ["accessModes", "resources", "storageClassName"]
+                "required": [
+                  "accessModes",
+                  "resources",
+                  "storageClassName"
+                ]
               }
             },
-            "required": ["metadata", "spec"]
+            "required": [
+              "metadata",
+              "spec"
+            ]
           }
         }
       }
