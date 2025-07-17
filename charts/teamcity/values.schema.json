@@ -271,12 +271,23 @@
                 "required": [
                   "claimName"
                 ]
+              },
+              "secret": {
+                "type": "object",
+                "properties": {
+                  "secretName": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "secretName"
+                ]
               }
             },
             "required": [
-              "name",
-              "persistentVolumeClaim"
-            ]
+              "name"
+            ],
+            "additionalProperties": true
           }
         },
         "service": {
