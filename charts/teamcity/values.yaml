@@ -156,6 +156,8 @@ agent:
         repository: jetbrains/teamcity-agent
         # Image tag to use (leave empty to use default from Chart or latest)
         tag: ""
+        # Optional suffix for the image tag (e.g., linux-sudo)
+        tagSuffix: ""
         # Image pull policy (e.g., Always, IfNotPresent, Never)
         pullPolicy: Always
 

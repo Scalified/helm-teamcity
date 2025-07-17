@@ -1,37 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "teamcity.server.fullname" . }}
+  name: {{ include "teamcity.server.fullname" $ }}
   labels:
-    {{- include "teamcity.server.labels" . | nindent 4 }}
+    {{- include "teamcity.server.labels" $ | nindent 4 }}
 spec:
-  replicas: {{ .Values.server.replicaCount | default 1 }}
+  {{- with .Values.server }}
+  {{- $server := . }}
+  replicas: {{ .replicaCount | default 1 }}
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      {{- include "teamcity.server.selectorLabels" . | nindent 6 }}
+      {{- include "teamcity.server.selectorLabels" $ | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "teamcity.server.selectorLabels" . | nindent 8 }}
+        {{- include "teamcity.server.selectorLabels" $ | nindent 8 }}
     spec:
       containers:
+        {{- with .containers.server }}
         - name: server
-          image: "{{ .Values.server.containers.server.image.repository }}:{{ .Values.server.containers.server.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.server.containers.server.image.pullPolicy | default "IfNotPresent" }}
-          {{- if .Values.server.service }}
+          {{- with .image }}
+          image: "{{ .repository }}:{{ .tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ .pullPolicy | default "IfNotPresent" }}
+          {{- end }}
+          {{- if $server.service }}
           ports:
-            {{- range .Values.server.service.ports }}
+            {{- range $server.service.ports }}
             - containerPort: {{ .targetPort }}
               name: {{ .name }}
               protocol: {{ .protocol }}
             {{- end }}
           {{- end }}
-{{- if .Values.server.containers.server.env }}
+          {{- if .env }}
           env:
-{{ toYaml .Values.server.containers.server.env | indent 12 }}
-{{- end }}
+{{ toYaml .env | indent 12 }}
+          {{- end }}
           startupProbe:
             failureThreshold: 3
             initialDelaySeconds: 15
@@ -42,7 +47,7 @@ spec:
             timeoutSeconds: 2
           readinessProbe:
             tcpSocket:
-              port: {{ .Values.server.containers.server.port | default 8111 }}
+              port: {{ .port | default 8111 }}
             initialDelaySeconds: 10
             periodSeconds: 15
             timeoutSeconds: 2
@@ -50,31 +55,35 @@ spec:
             failureThreshold: 3
           livenessProbe:
             tcpSocket:
-              port: {{ .Values.server.containers.server.port | default 8111 }}
+              port: {{ .port | default 8111 }}
             initialDelaySeconds: 30
             periodSeconds: 20
             timeoutSeconds: 2
             successThreshold: 1
             failureThreshold: 5
-{{- if .Values.server.containers.server.resources }}
+          {{- if .resources }}
           resources:
-{{ toYaml .Values.server.containers.server.resources | indent 12 }}
-{{- end }}
-{{- if .Values.server.containers.server.securityContext }}
+{{ toYaml .resources | indent 12 }}
+          {{- end }}
+          {{- if .securityContext }}
           securityContext:
-{{ toYaml .Values.server.containers.server.securityContext | indent 12 }}
-{{- end }}
-{{- if .Values.server.containers.server.volumeMounts }}
+{{ toYaml .securityContext | indent 12 }}
+          {{- end }}
+          {{- if .volumeMounts }}
           volumeMounts:
-{{ toYaml .Values.server.containers.server.volumeMounts | indent 12 }}
-{{- end }}
+{{ toYaml .volumeMounts | indent 12 }}
+          {{- end }}
+        {{- end }}
+        {{- with .containers.database }}
         - name: database
-          image: "{{ .Values.server.containers.database.image.repository }}:{{ .Values.server.containers.database.image.tag }}"
-          imagePullPolicy: {{ .Values.server.containers.database.image.pullPolicy | default "IfNotPresent" }}
-{{- if .Values.server.containers.database.env }}
+          {{- with .image }}
+          image: "{{ .repository }}:{{ .tag }}"
+          imagePullPolicy: {{ .pullPolicy | default "IfNotPresent" }}
+          {{- end }}
+          {{- if .env }}
           env:
-{{ toYaml .Values.server.containers.database.env | indent 12 }}
-{{- end }}
+{{ toYaml .env | indent 12 }}
+          {{- end }}
           readinessProbe:
             exec:
               command:
@@ -101,15 +110,19 @@ spec:
             periodSeconds: 20
             successThreshold: 1
             timeoutSeconds: 2
+          {{- if .resources }}
           resources:
-{{ toYaml .Values.server.containers.database.resources | indent 12 }}
-{{- if .Values.server.containers.database.volumeMounts }}
+{{ toYaml .resources | indent 12 }}
+          {{- end }}
+          {{- if .volumeMounts }}
           volumeMounts:
-{{ toYaml .Values.server.containers.database.volumeMounts | indent 12 }}
-{{- end }}
-      hostname: {{ .Values.server.hostname }}
+{{ toYaml .volumeMounts | indent 12 }}
+          {{- end }}
+        {{- end }}
+      hostname: {{ .hostname }}
       restartPolicy: Always
-{{- if .Values.server.volumes }}
+      {{- if .volumes }}
       volumes:
-{{ toYaml .Values.server.volumes | indent 8 }}
-{{- end }}
+{{ toYaml .volumes | indent 8 }}
+      {{- end }}
+  {{ end }}

@@ -1,6 +1,6 @@
 apiVersion: v2
 name: teamcity
-version: 0.0.20
+version: 0.0.21
 appVersion: "2025.03.3"
 kubeVersion: ">= 1.13.0"
 description: TeamCity Helm Chart

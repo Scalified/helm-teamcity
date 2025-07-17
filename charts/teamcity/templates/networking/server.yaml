@@ -1,22 +1,24 @@
-{{- if .Values.server.ingress -}}
+{{- if .Values.server.ingress }}
+{{- with .Values.server.ingress }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "teamcity.server.fullname" . }}
+  name: {{ include "teamcity.server.fullname" $ }}
   labels:
-    {{- include "teamcity.server.labels" . | nindent 4 }}
-  {{- if .Values.server.ingress.annotations }}
+    {{- include "teamcity.server.labels" $ | nindent 4 }}
+  {{- if .annotations }}
   annotations:
-    {{- toYaml .Values.server.ingress.annotations | nindent 4 }}
+    {{- toYaml .annotations | nindent 4 }}
   {{- end }}
 spec:
-  ingressClassName: {{ .Values.server.ingress.className }}
-  {{- if .Values.server.ingress.tls }}
+  ingressClassName: {{ .className }}
+  {{- if .tls }}
   tls:
-{{ toYaml .Values.server.ingress.tls | indent 4 }}
+{{ toYaml .tls | indent 4 }}
   {{- end }}
-  {{- if .Values.server.ingress.rules }}
+  {{- if .rules }}
   rules:
-{{ toYaml .Values.server.ingress.rules | indent 4 }}
+{{ toYaml .rules | indent 4 }}
   {{- end }}
+{{- end }}
 {{- end }}

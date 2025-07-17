@@ -520,6 +520,11 @@
                       "description": "Image tag to use (leave empty to use default from Chart or latest)",
                       "default": ""
                     },
+                    "tagSuffix": {
+                      "type": "string",
+                      "description": "Optional suffix for the image tag (e.g., linux-sudo)",
+                      "default": ""
+                    },
                     "pullPolicy": {
                       "type": "string",
                       "description": "Image pull policy (e.g., Always, IfNotPresent, Never)",

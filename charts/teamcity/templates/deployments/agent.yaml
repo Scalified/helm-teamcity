@@ -1,53 +1,60 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "teamcity.agent.fullname" . }}
+  name: {{ include "teamcity.agent.fullname" $ }}
   labels:
-    {{- include "teamcity.agent.labels" . | nindent 4 }}
+    {{- include "teamcity.agent.labels" $ | nindent 4 }}
 spec:
+  {{- with .Values.agent }}
+  {{- $agent := . }}
   ordinals:
-    start: {{ .Values.agent.ordinals.start | default 1 }}
-  replicas: {{ .Values.agent.replicaCount | default 1 }}
-  serviceName: {{ include "teamcity.agent.fullname" . }}
+    start: {{ .ordinals.start | default 1 }}
+  replicas: {{ .replicaCount | default 1 }}
+  serviceName: {{ include "teamcity.agent.fullname" $ }}
   selector:
     matchLabels:
-      {{- include "teamcity.agent.selectorLabels" . | nindent 6 }}
+      {{- include "teamcity.agent.selectorLabels" $ | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "teamcity.agent.selectorLabels" . | nindent 8 }}
+        {{- include "teamcity.agent.selectorLabels" $ | nindent 8 }}
     spec:
       containers:
+        {{- with .containers.agent }}
         - name: teamcity-agent
-          image: "{{ .Values.agent.containers.agent.image.repository }}:{{ .Values.agent.containers.agent.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.agent.containers.agent.image.pullPolicy | default "IfNotPresent" }}
+        {{- with .image }}
+          image: "{{ .repository }}:{{ .tag | default $.Chart.AppVersion }}{{ if .tagSuffix }}-{{ .tagSuffix }}{{ end }}"
+          imagePullPolicy: {{ .pullPolicy | default "IfNotPresent" }}
+        {{- end }}
           env:
             - name: AGENT_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-{{- if .Values.agent.containers.agent.env }}
-{{ toYaml .Values.agent.containers.agent.env | indent 12 }}
-{{- end }}
-{{- if .Values.agent.containers.agent.resources }}
+          {{- if .env }}
+{{ toYaml .env | indent 12 }}
+          {{- end }}
+          {{- if .resources }}
           resources:
-{{ toYaml .Values.agent.containers.agent.resources | indent 12 }}
-{{- end }}
-{{- if .Values.agent.containers.agent.securityContext }}
+{{ toYaml .resources | indent 12 }}
+          {{- end }}
+          {{- if .securityContext }}
           securityContext:
-{{ toYaml .Values.agent.containers.agent.securityContext | indent 12 }}
-{{- end }}
-{{- if .Values.agent.containers.agent.volumeMounts }}
+{{ toYaml .securityContext | indent 12 }}
+          {{- end }}
+          {{- if .volumeMounts }}
           volumeMounts:
-{{ toYaml .Values.agent.containers.agent.volumeMounts | indent 12 }}
-{{- end }}
-      hostname: {{ .Values.agent.hostname }}
+{{ toYaml .volumeMounts | indent 12 }}
+          {{- end }}
+          {{- end }}
+      hostname: {{ .hostname }}
       restartPolicy: Always
-{{- if .Values.agent.volumes }}
+      {{- if .volumes }}
       volumes:
-{{ toYaml .Values.agent.volumes | indent 8 }}
-{{- end }}
-{{- if .Values.agent.volumeClaimTemplates }}
+{{ toYaml .volumes | indent 8 }}
+      {{- end }}
+      {{- if .volumeClaimTemplates }}
   volumeClaimTemplates:
-{{ toYaml .Values.agent.volumeClaimTemplates | indent 4 }}
-{{- end }}
+{{ toYaml .volumeClaimTemplates | indent 4 }}
+      {{- end }}
+  {{ end }}
