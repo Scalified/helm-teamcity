@@ -14,11 +14,11 @@ spec:
   ingressClassName: {{ .className }}
   {{- if .tls }}
   tls:
-{{ toYaml .tls | indent 4 }}
+  {{ toYaml .tls | nindent 4 }}
   {{- end }}
   {{- if .rules }}
   rules:
-{{ toYaml .rules | indent 4 }}
+  {{ toYaml .rules | nindent 4 }}
   {{- end }}
 {{- end }}
 {{- end }}

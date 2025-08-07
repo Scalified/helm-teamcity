@@ -22,39 +22,39 @@ spec:
       containers:
         {{- with .containers.agent }}
         - name: teamcity-agent
-        {{- with .image }}
+          {{- with .image }}
           image: "{{ .repository }}:{{ .tag | default $.Chart.AppVersion }}{{ if .tagSuffix }}-{{ .tagSuffix }}{{ end }}"
           imagePullPolicy: {{ .pullPolicy | default "IfNotPresent" }}
-        {{- end }}
+          {{- end }}
           env:
             - name: AGENT_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
           {{- if .env }}
-{{ toYaml .env | indent 12 }}
+          {{ toYaml .env | nindent 12 }}
           {{- end }}
           {{- if .resources }}
           resources:
-{{ toYaml .resources | indent 12 }}
+          {{ toYaml .resources | nindent 12 }}
           {{- end }}
           {{- if .securityContext }}
           securityContext:
-{{ toYaml .securityContext | indent 12 }}
+          {{ toYaml .securityContext | nindent 12 }}
           {{- end }}
           {{- if .volumeMounts }}
           volumeMounts:
-{{ toYaml .volumeMounts | indent 12 }}
+          {{ toYaml .volumeMounts | nindent 12 }}
           {{- end }}
           {{- end }}
       hostname: {{ .hostname }}
       restartPolicy: Always
       {{- if .volumes }}
       volumes:
-{{ toYaml .volumes | indent 8 }}
+      {{ toYaml .volumes | nindent 8 }}
       {{- end }}
-      {{- if .volumeClaimTemplates }}
+  {{- if .volumeClaimTemplates }}
   volumeClaimTemplates:
-{{ toYaml .volumeClaimTemplates | indent 4 }}
-      {{- end }}
-  {{ end }}
+  {{ toYaml .volumeClaimTemplates | nindent 4 }}
+  {{- end }}
+  {{- end }}

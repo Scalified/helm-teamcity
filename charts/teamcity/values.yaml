@@ -40,7 +40,7 @@ server:
       #   - name: teamcity
       #     mountPath: /opt/teamcity/logs
       #     subPath: server/logs
-      volumeMounts: null
+      volumeMounts: []
 
       # Default port for the TeamCity Server HTTP service (web UI and API)
       port: 8111
@@ -75,7 +75,7 @@ server:
       #   - name: teamcity
       #     mountPath: /var/lib/postgresql/data
       #     subPath: postgresql/data
-      volumeMounts: null
+      volumeMounts: []
 
   # Hostname used for the TeamCity Server pod/container
   hostname: teamcity-server
@@ -86,10 +86,9 @@ server:
   #   - name: teamcity
   #     persistentVolumeClaim:
   #       claimName: teamcity
-  volumes: null
+  volumes: []
 
   # Configuration for the Kubernetes Service exposing TeamCity Server
-  # If set to null, no Service resource will be created
   service:
     # Kubernetes service type (e.g., ClusterIP, NodePort, LoadBalancer)
     type: ClusterIP
@@ -103,27 +102,25 @@ server:
 
   # Configuration for Ingress to expose TeamCity Server via HTTP/HTTPS
   # Note: Ingress only applies to the server component
-  # If set to null, no Ingress resource will be created
   ingress:
-    # Annotations to customize the behavior of the ingress controller.
-    # Leave as null to disable.
+    # Annotations to customize the behavior of the ingress controller
     # Example:
     # annotations:
     #   nginx.ingress.kubernetes.io/proxy-body-size: "100m"
     #   nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
     #   nginx.ingress.kubernetes.io/configuration-snippet: |
     #     more_set_headers "X-Content-Type-Options: nosniff";
-    annotations: null
+    annotations: {}
     # Ingress class name (used to select the Ingress controller, e.g., nginx or traefik)
     className: nginx
-    # TLS configuration for the ingress. Set to null to disable
+    # TLS configuration for the ingress
     # Example:
     # tls:
     #   - hosts:
     #       - teamcity.example.com
     #     secretName: teamcity-tls
-    tls: null
-    # List of ingress rules. If null or empty, no ingress will be created
+    tls: []
+    # List of ingress rules
     # Example:
     # rules:
     #   - host: teamcity.example.com
@@ -136,7 +133,7 @@ server:
     #               name: teamcity-server
     #               port:
     #                 number: 8111
-    rules: null
+    rules: []
 
 # TeamCity Agent configuration
 agent:
@@ -188,7 +185,7 @@ agent:
   # volumes:
   #   - name: urandom
   #     path: /dev/urandom
-  volumes: null
+  volumes: []
 
   # Persistent volume claim templates for TeamCity Agent pods
   volumeClaimTemplates:
