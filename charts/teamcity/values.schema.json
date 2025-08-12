@@ -560,6 +560,11 @@
           "description": "Hostname used for the TeamCity agent pod/container",
           "default": "teamcity-agent"
         },
+        "serviceAccountName": {
+          "type": "string",
+          "description": "Service account name to be used by the TeamCity Agent pods",
+          "default": ""
+        },
         "volumes": {
           "type": "array",
           "description": "Additional volumes to be mounted into the TeamCity Agent pods",

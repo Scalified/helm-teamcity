@@ -180,6 +180,9 @@ agent:
   # Hostname used for the TeamCity agent pod/container
   hostname: teamcity-agent
 
+  # Service account name to be used by the TeamCity Agent pods
+  serviceAccountName: ""
+
   # Additional volumes to be mounted into the TeamCity Agent pods
   # Example:
   # volumes:

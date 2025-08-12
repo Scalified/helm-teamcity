@@ -50,6 +50,9 @@ spec:
       hostname: {{ .hostname }}
       restartPolicy: Always
       {{- if .volumes }}
+      {{- if .serviceAccountName }}
+      serviceAccountName: {{ .serviceAccountName }}
+      {{- end }}
       volumes:
       {{ toYaml .volumes | nindent 8 }}
       {{- end }}
