@@ -12,7 +12,7 @@
 
 ```bash
 helm repo add scalified-teamcity https://scalified.github.io/helm-teamcity/
-helm upgrade --install nexus scalified-teamcity/teamcity --create-namespace --namespace teamcity
+helm upgrade --install teamcity scalified-teamcity/teamcity --create-namespace --namespace teamcity
 ```
 
 ---
