@@ -15,6 +15,10 @@ spec:
       {{- include "teamcity.server.selectorLabels" $ | nindent 6 }}
   template:
     metadata:
+      {{- if .annotations }}
+      annotations:
+        {{- toYaml .annotations | nindent 8 }}
+      {{- end }}
       labels:
         {{- include "teamcity.server.selectorLabels" $ | nindent 8 }}
     spec:
@@ -35,7 +39,7 @@ spec:
           {{- end }}
           {{- if .env }}
           env:
-          {{ toYaml .env | nindent 12 }}
+            {{- toYaml .env | nindent 12 }}
           {{- end }}
           startupProbe:
             failureThreshold: 3
@@ -63,15 +67,15 @@ spec:
             failureThreshold: 5
           {{- if .resources }}
           resources:
-          {{ toYaml .resources | nindent 12 }}
+            {{- toYaml .resources | nindent 12 }}
           {{- end }}
           {{- if .securityContext }}
           securityContext:
-          {{ toYaml .securityContext | nindent 12 }}
+            {{- toYaml .securityContext | nindent 12 }}
           {{- end }}
           {{- if .volumeMounts }}
           volumeMounts:
-          {{ toYaml .volumeMounts | nindent 12 }}
+            {{- toYaml .volumeMounts | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- with .containers.database }}
@@ -82,7 +86,7 @@ spec:
           {{- end }}
           {{- if .env }}
           env:
-          {{ toYaml .env | nindent 12 }}
+            {{- toYaml .env | nindent 12 }}
           {{- end }}
           readinessProbe:
             exec:
@@ -112,17 +116,17 @@ spec:
             timeoutSeconds: 2
           {{- if .resources }}
           resources:
-          {{ toYaml .resources | nindent 12 }}
+            {{- toYaml .resources | nindent 12 }}
           {{- end }}
           {{- if .volumeMounts }}
           volumeMounts:
-          {{ toYaml .volumeMounts | nindent 12 }}
+            {{- toYaml .volumeMounts | nindent 12 }}
           {{- end }}
         {{- end }}
       hostname: {{ .hostname }}
       restartPolicy: Always
       {{- if .volumes }}
       volumes:
-      {{ toYaml .volumes | nindent 8 }}
+        {{- toYaml .volumes | nindent 8 }}
       {{- end }}
   {{ end }}

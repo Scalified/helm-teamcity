@@ -18,6 +18,11 @@
       "type": "object",
       "description": "TeamCity Server configuration",
       "properties": {
+        "annotations": {
+          "type": "object",
+          "description": "Metadata annotations for the TeamCity Server deployment",
+          "default": {}
+        },
         "replicaCount": {
           "type": "integer",
           "description": "Number of server replicas/pods to run (should typically be 1)",
@@ -421,10 +426,7 @@
                 ]
               }
             }
-          },
-          "required": [
-            "className"
-          ]
+          }
         }
       }
     },
@@ -432,6 +434,11 @@
       "type": "object",
       "description": "TeamCity Agent configuration",
       "properties": {
+        "annotations": {
+          "type": "object",
+          "description": "Metadata annotations for the TeamCity Agent deployment",
+          "default": {}
+        },
         "ordinals": {
           "type": "object",
           "properties": {

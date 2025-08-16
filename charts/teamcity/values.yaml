@@ -6,6 +6,12 @@ fullnameOverride: ""
 
 # TeamCity Server configuration
 server:
+  # Metadata annotations for the TeamCity Server deployment
+  # Example:
+  # annotations:
+  #   example.com/annotation: "value"
+  annotations: {}
+
   # Number of server replicas/pods to run (should typically be 1)
   replicaCount: 1
 
@@ -102,41 +108,38 @@ server:
 
   # Configuration for Ingress to expose TeamCity Server via HTTP/HTTPS
   # Note: Ingress only applies to the server component
-  ingress:
-    # Annotations to customize the behavior of the ingress controller
-    # Example:
-    # annotations:
-    #   nginx.ingress.kubernetes.io/proxy-body-size: "100m"
-    #   nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
-    #   nginx.ingress.kubernetes.io/configuration-snippet: |
-    #     more_set_headers "X-Content-Type-Options: nosniff";
-    annotations: {}
-    # Ingress class name (used to select the Ingress controller, e.g., nginx or traefik)
-    className: nginx
-    # TLS configuration for the ingress
-    # Example:
-    # tls:
-    #   - hosts:
-    #       - teamcity.example.com
-    #     secretName: teamcity-tls
-    tls: []
-    # List of ingress rules
-    # Example:
-    # rules:
-    #   - host: teamcity.example.com
-    #     http:
-    #       paths:
-    #         - path: /
-    #           pathType: Prefix
-    #           backend:
-    #             service:
-    #               name: teamcity-server
-    #               port:
-    #                 number: 8111
-    rules: []
+  # Example:
+  # annotations:
+  #   nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+  #   nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+  #   nginx.ingress.kubernetes.io/configuration-snippet: |
+  #     more_set_headers "X-Content-Type-Options: nosniff";
+  # className: nginx
+  # tls:
+  #   - hosts:
+  #       - teamcity.example.com
+  #     secretName: teamcity-tls
+  # rules:
+  #   - host: teamcity.example.com
+  #     http:
+  #       paths:
+  #         - path: /
+  #           pathType: Prefix
+  #           backend:
+  #             service:
+  #               name: teamcity-server
+  #               port:
+  #                 number: 8111
+  ingress: {}
 
 # TeamCity Agent configuration
 agent:
+  # Metadata annotations for the TeamCity Agent deployment
+  # Example:
+  # annotations:
+  #   example.com/annotation: "value"
+  annotations: {}
+
   # Ordinals configuration for the StatefulSet (starting ordinal index)
   ordinals:
     start: 1

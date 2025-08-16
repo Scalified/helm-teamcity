@@ -12,7 +12,7 @@ spec:
   type: {{ .type }}
   {{- if .ports }}
   ports:
-  {{ toYaml .ports | nindent 4 }}
+    {{- toYaml .ports | nindent 4 }}
   {{- end }}
 {{- end }}
 {{- end }}
