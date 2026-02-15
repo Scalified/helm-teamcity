@@ -1,0 +1,19 @@
+name: Bump Helm chart
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+
+jobs:
+  bump-chart:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Bump chart
+        uses: Scalified/helm-chart-bump-action@v1
+        with:
+          dockerhub-namespace: jetbrains
+          dockerhub-repository: teamcity-server
+          chart-file-path: charts/teamcity/Chart.yaml
+          docker-image-tag-pattern: '^v?[0-9]+\.[0-9]+\.[0-9]+$'
