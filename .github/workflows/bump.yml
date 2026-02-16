@@ -13,6 +13,7 @@ jobs:
       - name: Bump chart
         uses: Scalified/helm-chart-bump-action@v1
         with:
+          token: "${{ secrets.GH_TOKEN }}"
           dockerhub-namespace: jetbrains
           dockerhub-repository: teamcity-server
           chart-file-path: charts/teamcity/Chart.yaml
