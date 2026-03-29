@@ -90,12 +90,7 @@ spec:
           {{- end }}
           readinessProbe:
             exec:
-              command:
-                - pg_isready
-                - '-d'
-                - $POSTGRES_DB
-                - '-U'
-                - $POSTGRES_USER
+              command: ["sh", "-c", "pg_isready -d \"$POSTGRES_DB\" -U \"$POSTGRES_USER\""]
             failureThreshold: 3
             initialDelaySeconds: 10
             periodSeconds: 15
@@ -103,12 +98,7 @@ spec:
             timeoutSeconds: 2
           livenessProbe:
             exec:
-              command:
-                - pg_isready
-                - '-d'
-                - $POSTGRES_DB
-                - '-U'
-                - $POSTGRES_USER
+              command: ["sh", "-c", "pg_isready -d \"$POSTGRES_DB\" -U \"$POSTGRES_USER\""]
             failureThreshold: 5
             initialDelaySeconds: 30
             periodSeconds: 20
