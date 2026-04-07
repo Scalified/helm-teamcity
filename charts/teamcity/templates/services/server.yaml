@@ -1,18 +1,16 @@
-{{- if .Values.server.service }}
-{{- with .Values.server.service }}
+{{- if .Values.server.services }}
+{{- range .Values.server.services }}
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "teamcity.server.fullname" $ }}
-  labels:
-    {{- include "teamcity.server.labels" $ | nindent 4 }}
+  name: {{ include "teamcity.server.fullname" $ }}{{ if .name }}-{{ .name }}{{ end }}
+  labels: {{- include "teamcity.server.labels" $ | nindent 4 }}
 spec:
-  selector:
-    {{- include "teamcity.server.selectorLabels" $ | nindent 4 }}
+  selector: {{- include "teamcity.server.selectorLabels" $ | nindent 4 }}
   type: {{ .type }}
   {{- if .ports }}
-  ports:
-    {{- toYaml .ports | nindent 4 }}
+  ports: {{- toYaml .ports | nindent 4 }}
   {{- end }}
 {{- end }}
 {{- end }}
