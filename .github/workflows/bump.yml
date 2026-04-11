@@ -2,7 +2,7 @@ name: Bump Helm chart
 
 on:
   schedule:
-    - cron: "0 2 * * *"
+    - cron: "0 2 * * 3"
 
 jobs:
   bump-chart:
