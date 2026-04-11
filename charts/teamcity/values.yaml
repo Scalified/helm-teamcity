@@ -171,10 +171,6 @@ agent:
           # Minimum amount of memory requested for each agent container
           memory: 2Gi
 
-      securityContext:
-        # User ID to run the agent container process as (set to 0 for root)
-        runAsUser: 0
-
       # Additional volume mounts for TeamCity agent containers
       volumeMounts:
         - name: teamcity-agent

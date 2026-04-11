@@ -59,8 +59,12 @@ spec:
           {{- if .resources }}
           resources: {{- toYaml .resources | nindent 12 }}
           {{- end }}
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
           {{- if .securityContext }}
-          securityContext: {{- toYaml .securityContext | nindent 12 }}
+          {{- toYaml .securityContext | nindent 12 }}
           {{- end }}
           {{- if .volumeMounts }}
           volumeMounts: {{- toYaml .volumeMounts | nindent 12 }}
@@ -93,6 +97,8 @@ spec:
             timeoutSeconds: 2
           {{- if .resources }}
           resources: {{- toYaml .resources | nindent 12 }}
+          securityContext:
+            runAsUser: 0
           {{- end }}
           {{- if .volumeMounts }}
           volumeMounts: {{- toYaml .volumeMounts | nindent 12 }}
@@ -100,6 +106,8 @@ spec:
         {{- end }}
       hostname: {{ .hostname }}
       restartPolicy: Always
+      securityContext:
+        fsGroup: 1000
       {{- if .volumes }}
       volumes: {{- toYaml .volumes | nindent 8 }}
       {{- end }}
