@@ -44,7 +44,9 @@ spec:
           volumeMounts: {{- toYaml .volumeMounts | nindent 12 }}
           {{- end }}
           {{- end }}
+      {{- if .hostname }}
       hostname: {{ .hostname }}
+      {{- end }}
       restartPolicy: Always
       {{- if .volumes }}
       {{- if .serviceAccountName }}

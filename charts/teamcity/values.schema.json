@@ -227,7 +227,7 @@
         "hostname": {
           "type": "string",
           "description": "Hostname used for the TeamCity Server pod/container",
-          "default": "teamcity-server"
+          "default": ""
         },
         "volumes": {
           "type": "array",
@@ -565,7 +565,7 @@
         "hostname": {
           "type": "string",
           "description": "Hostname used for the TeamCity agent pod/container",
-          "default": "teamcity-agent"
+          "default": ""
         },
         "serviceAccountName": {
           "type": "string",

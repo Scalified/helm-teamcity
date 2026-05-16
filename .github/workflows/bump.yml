@@ -1,6 +1,7 @@
 name: Bump Helm chart
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: "0 1 * * 6"
 
@@ -17,4 +18,4 @@ jobs:
           dockerhub-namespace: jetbrains
           dockerhub-repository: teamcity-server
           chart-file-path: charts/teamcity/Chart.yaml
-          docker-image-tag-pattern: '^v?[0-9]+\.[0-9]+\.[0-9]+$'
+          docker-image-tag-pattern: '^v?[0-9]+\.[0-9]+(\.[0-9]+)?$'
