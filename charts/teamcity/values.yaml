@@ -57,7 +57,7 @@ server:
         # Docker image repository for TeamCity database
         repository: postgres
         # Image tag to use (leave empty to use default from Chart or latest)
-        tag: "14"
+        tag: "17"
         # Image pull policy (e.g., Always, IfNotPresent, Never)
         pullPolicy: IfNotPresent
 
